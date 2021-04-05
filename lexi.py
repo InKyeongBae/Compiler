@@ -61,17 +61,9 @@ class FiniteAutomata(): #Finite Automata for NFA, DFA
             i = 0
             self.Delta.update({str(T):{}})
             for alphabet in self.Sigma:
-                #dictinary 만드는 함수로 따로 빼기
-                # if type(alphabet) == list:
-                #     key = str(alphabet)
-                #     print("//")
-                #     print(str(T),"/", alphabet, "/",table[str(T)][i])
-                #     self.Delta.update({str(T):{ key : table[str(T)][i]}})
-                # else:
                 print("**")
                 print(str(T),"/", alphabet, "/",table[str(T)][i])
                 self.Delta[str(T)][str(alphabet)] = table[str(T)][i]
-                #self.Delta.update({str(T):{ str(alphabet) : table[str(T)][i]}})
                 i = i + 1
 
 
@@ -88,16 +80,7 @@ table = {
 Integer = FiniteAutomata(
     ["T0", "T1", "T2", "T3", "T4"], #이거 쓸라나?
     ["-", 0, DIGIT[1:], DIGIT], #얘도 쓸라나?
-    {"T2":"INTEGER", "T3":"INTEGER", "T4":"INTEGER"}, #accepetd token name
-    '''
-    { #0, 1, 2,3 4, 풀어서 일단 짠 다음에 -> 나중에 생각나면 합칠수 있게 
-        "T0": {"-":"T1", 0:"T2", DIGIT[1:]:"T3", DIGIT:""},
-        #"T0": {"-":"T1", 0:"T2", 1:"T3", 2:"T3", 3:"T3", 4:"T3", 0:"T3" DIGIT:""}
-        "T1": {"-":"", 0:"", DIGIT[1:]:"T3", DIGIT:""},
-        "T2": {"-":"", 0:"", DIGIT[1:]:"", DIGIT:""},
-        "T3": {"-":"", 0:"", DIGIT[1:]:"", DIGIT:"T4"},
-        "T4": {"-":"", 0:"", DIGIT[1:]:"", DIGIT:"T4"}
-    }'''
+    {"T2":"INTEGER", "T3":"INTEGER", "T4":"INTEGER"} #accepetd token name
 ) #dfa transition table 정의
 
 
