@@ -11,6 +11,7 @@ for i in range(len(input)) :
         if checking.next_string == '\n' :
             break
         else :
+            # merged
             checking.dfa_identifier(checking.next_string)
             checking.dfa_blank(checking.next_string)
             checking.dfa_semicolon(checking.next_string)

@@ -66,8 +66,7 @@ class FiniteAutomata(): #Finite Automata for NFA, DFA
                 self.Delta[str(T)][str(alphabet)] = table[str(T)][i]
                 i = i + 1
 
-
-table = { 
+Integer = {
     "T0": ["T1", "T2", "T3", ""],
     "T1": ["", "", "T3", ""],
     "T2": ["", "", "", ""],
@@ -81,6 +80,7 @@ Integer = FiniteAutomata(
     ["T0", "T1", "T2", "T3", "T4"], #이거 쓸라나?
     ["-", 0, DIGIT[1:], DIGIT], #얘도 쓸라나?
     {"T2":"INTEGER", "T3":"INTEGER", "T4":"INTEGER"} #accepetd token name
+
 ) #dfa transition table 정의
 
 
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     #state = Integer.nextState('1')
     #print(Integer.acceptedToken(state))
     # mIndex = 0;
-    Integer.transitionTable(table)
+    Integer.transitionTable(table) #
     print(Integer.Delta)
 
     #test()
