@@ -505,6 +505,7 @@ class Scanner:
 
 inputs = "1"
 
+#If, Else, While, Class, Return, Minus
 MERGED1 = [Character, Literal, Comma, Lbrace, Rbrace, Lparen, Rparen, Assign, Semicolon, Larray, Rarray, Whitespace]
 MERGED2 = [Boolean, Keyword, Type, Identifier]
 MERGED3 = [Integer, Operator]
