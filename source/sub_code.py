@@ -51,6 +51,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
                 posNext[key] = value
 
         keys = posNext.keys()
+        print("keys",keys)
         for i in keys :
             if input in i :
                 newKey = i
@@ -84,8 +85,8 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
             i = 0
             self.Delta.update({str(T): {}})
             for alphabet in self.Sigma:
-                print("**")
-                print(str(T), "/", alphabet, "/", table[str(T)][i])
+                #print("**")
+                #print(str(T), "/", alphabet, "/", table[str(T)][i])
                 delta[str(T)][str(alphabet)]=table[str(T)][i]
                 i = i + 1
         return delta
@@ -97,7 +98,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
 Integer = FiniteAutomata(
     "INTEGER",  # matched token name
     ["T0", "T1", "T2", "T3", "T4"],  # state
-    ["-", 0, POS_DIGIT, DIGIT],  # input stream
+    ["-", "0", str(POS_DIGIT), str(DIGIT)],  # input stream
     ["T2", "T3", "T4"],  # accepted state
     {  # nfa to dfa transition table
         "T0": ["T1", "T2", "T3", ""],
@@ -108,7 +109,210 @@ Integer = FiniteAutomata(
     }
 )
 
+Whitespace = FiniteAutomata(
+    "WHITESPACE",  # matched token name
+    ["T0", "T1", "T2", "T3"],  # state
+    ["\t", "\n", " "],  # input stream
+    ["T1", "T2", "T3"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "T2", "T3"],
+        "T1": ["", "", ""],
+        "T2": ["", "", ""],
+        "T3": ["", "", ""],
+        "T4": ["", "", ""]
+    }
+)
 
+Boolean = FiniteAutomata(
+    "BOOLEAN",  # matched token name
+    ["T0", "T1", "T2"],  # state
+    ["true", "false"],  # input stream
+    ["T1", "T2"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "T2"],
+        "T1": ["", ""],
+        "T2": ["", ""]
+    }
+)
+
+#"'"
+Character = FiniteAutomata(
+    "CHARACTER",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5"],  # state
+    ["'", str(LETTER), str(DIGIT), str(BLANK)],  # input stream
+    ["T5"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", ""],
+        "T1": ["", "T2", "T3", "T4"],
+        "T2": ["T5", "", "", ""],
+        "T3": ["T5", "", "", ""],
+        "T4": ["T5", "", "", ""],
+        "T5": ["", "", "", ""]
+    }
+)
+
+Operator = FiniteAutomata(
+    "OPERATOR",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4"],  # state
+    ["+", "-", "*", "/"],  # input stream
+    ["T1", "T2", "T3", "T4"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "T2", "T3", "T4"],
+        "T1": ["", "", "", ""],
+        "T2": ["", "", "", ""],
+        "T3": ["", "", "", ""],
+        "T4": ["", "", "", ""]
+    }
+)
+
+##########finite안에 finite
+Type = FiniteAutomata(
+    "TYPE",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4"],  # state
+    ["int", "char", "boolean", "String"],  # input stream
+    ["T1", "T2", "T3", "T4"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "T2", "T3", "T4"],
+        "T1": ["", "", "", ""],
+        "T2": ["", "", "", ""],
+        "T3": ["", "", "", ""],
+        "T4": ["", "", "", ""]
+    }
+)
+
+Identifier = FiniteAutomata(
+    "IDENTIFIER",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5"],  # state
+    [str(LETTER), str(DIGIT), "_"],  # input stream
+    ["T1", "T2", "T3", "T4", "T5"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "T2"],
+        "T1": ["T3", "T4", "T5"],
+        "T2": ["T3", "T4", "T5"],
+        "T3": ["T3", "T4", "T5"],
+        "T4": ["T3", "T4", "T5"],
+        "T5": ["T3", "T4", "T5"]
+    }
+)
+
+Relop = FiniteAutomata(
+    "RELOP",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5", "T6"],  # state
+    ["<", "=", "!", ">"],  # input stream
+    ["T1", "T2", "T3", "T5", "T6"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "T2", "T3", "T4"],
+        "T1": ["", "T5", "", ""],
+        "T2": ["", "", "", ""],
+        "T3": ["", "", "", ""],
+        "T4": ["", "T6", "", ""],
+        "T5": ["", "", "", ""],
+        "T6": ["", "", "", ""]
+    }
+)
+
+If = FiniteAutomata(
+    "IF",  # matched token name
+    ["T0", "T1", "T2"],  # state
+    ["i", "f"],  # input stream
+    ["T2"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", ""],
+        "T1": ["", "T2"],
+        "T2": ["", ""]
+    }
+)
+
+Else = FiniteAutomata(
+    "ELSE",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4"],  # state
+    ["e", "l", "s"],  # input stream
+    ["T4"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", ""],
+        "T1": ["", "T2", ""],
+        "T2": ["", "", "T3"],
+        "T3": ["T4", "", ""],
+        "T4": ["", "", ""]
+    }
+)
+
+While = FiniteAutomata(
+    "WHILE",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5"],  # state
+    ["w", "h", "i", "l", "e"],  # input stream
+    ["T5"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", "", ""],
+        "T1": ["", "T2", "", "", ""],
+        "T2": ["", "", "T3", "", ""],
+        "T3": ["", "", "", "T4", ""],
+        "T4": ["", "", "", "", "T5"],
+        "T5": ["", "", "", "", ""]
+    }
+)
+
+Class = FiniteAutomata(
+    "CLASS",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5"],  # state
+    ["c", "l", "a", "s"],  # input stream
+    ["T5"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", ""],
+        "T1": ["", "T2", "", ""],
+        "T2": ["", "", "T3", ""],
+        "T3": ["", "", "", "T4"],
+        "T4": ["", "", "", "T5"],
+        "T5": ["", "", "", ""]
+    }
+)
+
+Return = FiniteAutomata(
+    "RETURN",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5", "T6"],  # state
+    ["r", "e", "t", "u", "r", "n"],  # input stream
+    ["T6"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", "", "", ""],
+        "T1": ["", "T2", "", "", "", ""],
+        "T2": ["", "", "T3", "", "", ""],
+        "T3": ["", "", "", "T4", "", ""],
+        "T4": ["", "", "", "", "T5", ""],
+        "T5": ["", "", "", "", "", ""]
+    }
+)
+
+Keyword = FiniteAutomata(
+    "KEYWORD",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5"],  # state
+    ["if", "else", "while", "class", "return"],  # input stream
+    ["T1", "T2", "T3", "T4", "T5"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "T2", "T3", "T4", "T5"],
+        "T1": ["", "", "", "", "", ""],
+        "T2": ["", "", "", "", "", ""],
+        "T3": ["", "", "", "", "", ""],
+        "T4": ["", "", "", "", "", ""],
+        "T5": ["", "", "", "", "", ""]
+    }
+)
+
+#"\""가 맞나?
+Literal = FiniteAutomata(
+    "LITERAL",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5"],  # state
+    ["\"", str(DIGIT), str(DIGIT), str(BLANK)],  # input stream
+    ["T5"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", ""],
+        "T1": ["", "T2", "T3", "T4"],
+        "T2": ["T5", "T2", "T3", "T4"],
+        "T3": ["T5", "T2", "T3", "T4"],
+        "T4": ["T5", "T2", "T3", "T4"],
+        "T5": ["", "", "", "", "", ""]
+    }
+)
+print("!!~!!",Integer.Sigma)
 
 class Scanner:
     # Token Definition
@@ -204,14 +408,47 @@ MERGED1 = [Integer]
 # print(MERGED[0].acceptedToken())
 # MERGED[0].clear()
 
-
+table = {}
 text1 = "-123"
-textState = 0
-if text1[textState] in OPERATOR or text1[0] in DIGIT :
-    for i in range(len(MERGED1)) :
-        while MERGED1[i].isIng == 1 :
-            MERGED1[i].nextState(text1[textState])
-            textState += 1
+textState = 1
+mIdx=0
+for textState in range(len(text1)): #try catch랑 겹치는?
+    try:
+        mIdx = textState
+        if text1[mIdx] in OPERATOR or text1[0] in DIGIT : #text1[textState]
+            for i in range(len(MERGED1)) :
+                print("$$")
+                while MERGED1[i].isIng == 1 :
+                    MERGED1[i].nextState(text1[textState]) #text1[textState]
+                    textState += 1
+                    print("textState:", textState)
+                    print("accept:",MERGED1[i].isAccepted())
+                    #한 단어? 앞 뒤로 화이트 스페이스가 있는 건지
+                    #글자.
+                    #오토마타 -> 한 글자가 Sigma가 들었는지, 들어있으면
+                    #isIng == 0, Sigma에 없으면 -> 현재 상태가 final이면 accepted
+                    #Sigma에는 있는데 isIng == 1,
+                        #nextState로 안 넘어갈 때 inIng == 0  
+                    if textState >= len(text1):
+                        MERGED1[i].isIng = 0
 
+                    #Ing 바뀌는 부분
+                if MERGED1[i].isAccepted():
+                    print("@")
+                    subStr = text1[mIdx:textState]
+                    print()
+                    table[subStr] = MERGED1[i].acceptedToken()
+                    print(subStr)
+                    break
+                else:
+                    textState = mIdx
+    except IndexError:
+        print("there is no more input");
 
+print("table:",table)
+    
+    #mIdx = textState
+    #textState = mIdx+1
+    
+    
 text2 = "1a"
