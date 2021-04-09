@@ -27,6 +27,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
     state = 0
     Q = []
     Delta = {}
+    isIng = 1
 
     def __init__(self, token, states, alphabet, final, table):  # startState
         self.tokenName = token
@@ -189,17 +190,28 @@ class Scanner:
 
 inputs = "1"
 
-MERGED = [Integer]
+MERGED1 = [Integer]
 
 #print(MERGED[0].Delta)
 #print("----------------------------------")
 #print(type(inputs[0]))
 #print(type(inputs))
-print(MERGED[0])
-next = MERGED[0].nextState('1')
-MERGED[0].moveState(next)
-print(MERGED[0].isAccepted())
-print(MERGED[0].currentState(next))
-print(MERGED[0].acceptedToken())
-MERGED[0].clear()
+# print(MERGED[0])
+# next = MERGED[0].nextState('1')
+# MERGED[0].moveState(next)
+# print(MERGED[0].isAccepted())
+# print(MERGED[0].currentState(next))
+# print(MERGED[0].acceptedToken())
+# MERGED[0].clear()
 
+
+text1 = "-123"
+textState = 0
+if text1[textState] in OPERATOR or text1[0] in DIGIT :
+    for i in range(len(MERGED1)) :
+        while MERGED1[i].isIng == 1 :
+            MERGED1[i].nextState(text1[textState])
+            textState += 1
+
+
+text2 = "1a"
