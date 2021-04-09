@@ -312,6 +312,117 @@ Literal = FiniteAutomata(
         "T5": ["", "", "", "", "", ""]
     }
 )
+
+Comma = FiniteAutomata(
+    "COMMA",  # matched token name
+    ["T0", "T1"],  # state
+    [","],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Minus = FiniteAutomata(
+    "MINUS",  # matched token name
+    ["T0", "T1"],  # state
+    ["-"],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Semicolon = FiniteAutomata(
+    "SEMICOLON",  # matched token name
+    ["T0", "T1"],  # state
+    [";"],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Lbrace = FiniteAutomata(
+    "LBRACE",  # matched token name
+    ["T0", "T1"],  # state
+    ["{"],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Rbrace = FiniteAutomata(
+    "RBRACE",  # matched token name
+    ["T0", "T1"],  # state
+    [";"],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Lparen = FiniteAutomata(
+    "LPAREN",  # matched token name
+    ["T0", "T1"],  # state
+    ["("],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Rparen = FiniteAutomata(
+    "RPAREN",  # matched token name
+    ["T0", "T1"],  # state
+    [")"],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Larray = FiniteAutomata(
+    "LARRAY",  # matched token name
+    ["T0", "T1"],  # state
+    ["["],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Rarray = FiniteAutomata(
+    "RARRAY",  # matched token name
+    ["T0", "T1"],  # state
+    ["]"],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
+Assign = FiniteAutomata(
+    "ASSIGN",  # matched token name
+    ["T0", "T1"],  # state
+    ["="],  # input stream
+    ["T1"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1"],
+        "T1": [""]
+    }
+)
+
 print("!!~!!",Integer.Sigma)
 
 class Scanner:
@@ -394,7 +505,10 @@ class Scanner:
 
 inputs = "1"
 
-MERGED1 = [Integer]
+MERGED1 = [Character, Literal, Comma, Lbrace, Rbrace, Lparen, Rparen, Assign, Semicolon, Larray, Rarray, Whitespace]
+MERGED2 = [Boolean, Keyword, Type, Identifier]
+MERGED3 = [Integer, Operator]
+MERGED4 = [Assign, Relop]
 
 #print(MERGED[0].Delta)
 #print("----------------------------------")
