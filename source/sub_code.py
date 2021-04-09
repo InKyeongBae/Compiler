@@ -324,16 +324,16 @@ Comma = FiniteAutomata(
     }
 )
 
-Minus = FiniteAutomata(
-    "MINUS",  # matched token name
-    ["T0", "T1"],  # state
-    ["-"],  # input stream
-    ["T1"],  # accepted state
-    {  # nfa to dfa transition table
-        "T0": ["T1"],
-        "T1": [""]
-    }
-)
+# Minus = FiniteAutomata(
+#     "MINUS",  # matched token name
+#     ["T0", "T1"],  # state
+#     ["-"],  # input stream
+#     ["T1"],  # accepted state
+#     {  # nfa to dfa transition table
+#         "T0": ["T1"],
+#         "T1": [""]
+#     }
+# )
 
 Semicolon = FiniteAutomata(
     "SEMICOLON",  # matched token name
