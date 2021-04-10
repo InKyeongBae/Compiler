@@ -50,7 +50,6 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         for i in self.Sigma:
             if input not in i:
                 isAlpha = 0
-            # 이렇게 하면 나중에 whitespace 어떡하지...ㅠㅠ
             elif input == ' ':
                 isAlpha = 0
             else:
@@ -247,17 +246,19 @@ Identifier = FiniteAutomata(
 
 Relop = FiniteAutomata(
     "RELOP",  # matched token name
-    ["T0", "T1", "T2", "T3", "T4", "T5", "T6"],  # state
+    ["T0", "T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"],  # state
     ["<", "=", "!", ">"],  # input stream
-    ["T1", "T2", "T3", "T5", "T6"],  # accepted state
+    ["T1", "T4", "T5", "T6", "T7", "T8"],  # accepted state
     {  # nfa to dfa transition table
         "T0": ["T1", "T2", "T3", "T4"],
         "T1": ["", "T5", "", ""],
-        "T2": ["", "", "", ""],
-        "T3": ["", "", "", ""],
-        "T4": ["", "T6", "", ""],
+        "T2": ["", "T6", "", ""],
+        "T3": ["", "T7", "", ""],
+        "T4": ["", "T8", "", ""],
         "T5": ["", "", "", ""],
-        "T6": ["", "", "", ""]
+        "T6": ["", "", "", ""],
+        "T7": ["", "", "", ""],
+        "T8": ["", "", "", ""]
     }
 )
 
@@ -565,34 +566,21 @@ TString = FiniteAutomata(
 
 #If, Else, While, Class, Return, Minus
 #boolean keyword type
+
+MERGED1 = [Literal, Character, Comma, Lbrace, Rbrace, Lparen, Rparen, Relop, Assign, Semicolon, Larray, Rarray]
 MERGED02 = [TTrue, TFalse, Class, If, Else, While, Return, TInt, TChar, TBoolean, TString, Identifier]
-MERGED1 = [Literal, Character, Comma, Lbrace, Rbrace, Lparen, Rparen, Assign, Semicolon, Larray, Rarray]
-MERGED2 = [Keyword, Boolean, Type, Identifier]
 MERGED3 = [Integer, Operator]
 MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
-
-# print(MERGED[0].Delta)
-# print("----------------------------------")
-# print(type(inputs[0]))
-# print(type(inputs))
-# print(MERGED[0])
-# next = MERGED[0].nextState('1')
-# MERGED[0].moveState(next)
-# print(MERGED[0].isAccepted())
-# print(MERGED[0].currentState(next))
-# print(MERGED[0].acceptedToken())
-# MERGED[0].clear()
-
 table = []
 # text1 = deque("int while if return true false char boolean String")
-text1 = deque("-(-123)")
+text1 = deque("--123")
+
 textState = 0
 
 while len(text1) > 0:
-    symbols = ["'", '"', ',', '{', '}', '(', ')', '=', ';', '[', ']']
-    symbols = symbols
+    symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
 
     if text1[textState] in symbols :
         for i in range(len(MERGED1)):
@@ -616,7 +604,6 @@ while len(text1) > 0:
                 text1copy = text1
                 for _ in range(textState):
                     subStr += text1.popleft()
-                print(">>>",subStr)
                 table.append([MERGED1[i].acceptedToken(), subStr])
                 textState = 0
                 MERGED1[i].clear()
@@ -683,6 +670,7 @@ while len(text1) > 0:
 
     #3) 숫자가 들어올 때
     elif text1[textState] in OPERATOR or text1[0] in DIGIT:
+
         for i in range(len(MERGED3)):
             while textState < len(text1) and MERGED3[i].checkIng(text1[textState]) == 1:
                 MERGED3[i].nextState(text1[textState])
@@ -702,30 +690,6 @@ while len(text1) > 0:
                 MERGED3[i].clear()
             else:
                 MERGED3[i].clear()
-                i += 1
-                textState = 0
-
-    #4) 연산자 들어올 때
-    elif text1[textState] in ["<", "=", "!", ">"] :
-        for i in range(len(MERGED4)):
-            while textState < len(text1) and MERGED4[i].checkIng(text1[textState]) == 1:
-                MERGED4[i].nextState(text1[textState])
-                if MERGED4[i].isIng == 1:
-                    textState += 1
-                else:
-                    break
-
-            if MERGED4[i].isAccepted():
-                subStr = ""
-                text1copy = text1
-                for _ in range(textState):
-                    subStr += text1.popleft()
-                print(">>>",subStr)
-                table.append([MERGED4[i].acceptedToken(), subStr])
-                textState = 0
-                MERGED4[i].clear()
-            else:
-                MERGED4[i].clear()
                 i += 1
                 textState = 0
 
@@ -750,7 +714,6 @@ while len(text1) > 0:
                 MERGED5[i].clear()
                 i += 1
                 textState = 0
-
 
     else :
         subStr = ""
