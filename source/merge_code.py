@@ -9,7 +9,7 @@ WHITESPACE = ['\t', '\n', ' ']
 BLANK = ' '
 
 # Alphabet Definition
-LETTER = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q,' 'R', 'S', 'T', 'U',
+LETTER = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
           'V', 'W', 'X', 'Y', 'Z',
           'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
           'v', 'w', 'x', 'y', 'z']
@@ -103,6 +103,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         newKey = ""
         for i in keys:
             if input in i:
+                print("---------------------------->",input, "*", i)
                 newKey = i
 
         if newKey in posNext:
@@ -578,7 +579,7 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
-file = "a-1"
+file = "'av'"
 # text1 = deque("int while if return true false char boolean String")
 text1 = deque(file)
 #int main(){char if123='1';int 0a=a+-1;return -0;}
@@ -590,6 +591,7 @@ while len(text1) > 0:
     print("length: ",)
     print("input",text1)
     if text1[textState] in symbols :
+        print("1")
         print("@@@@@@@@@")
         for i in range(len(MERGED1)):
             if i == 0 :
@@ -615,6 +617,11 @@ while len(text1) > 0:
                 table.append([MERGED1[i].acceptedToken(), subStr])
                 textState = 0
                 MERGED1[i].clear()
+            elif MERGED1[i].isAccepted() == False:
+                print(text1[textState])
+                print("~!~!~!!!!!")
+                MERGED1[i].clear()
+                
             else:
                 print("####3333###")
                 MERGED1[i].clear()
@@ -622,6 +629,7 @@ while len(text1) > 0:
                 textState = 0
 
     elif text1[textState] in LETTER or text1[textState] == "_":
+        print("2")
         for i in range(len(MERGED02)):
             while textState < len(text1) and MERGED02[i].checkIng(text1[textState]) == 1:
                 MERGED02[i].nextState(text1[textState])
@@ -653,6 +661,7 @@ while len(text1) > 0:
             # - 는 앞 뒤 내용에 따라 달라짐. (연산자 일 때)
             else :
                 if MERGED02[i].isAccepted() and text1[textState] == ' ' and i != len(MERGED02) - 1:
+                    print("2-0")
                     subStr = ""
                     for _ in range(textState):
                         subStr += text1.popleft()
@@ -666,6 +675,7 @@ while len(text1) > 0:
                     MERGED02[i].clear()
 
                 elif MERGED02[i].isAccepted() and i == len(MERGED02) - 1:
+                    print("2-1")
                     subStr = ""
                     for _ in range(textState):
                         subStr += text1.popleft()
@@ -673,12 +683,22 @@ while len(text1) > 0:
                     textState = 0
                     MERGED02[i].clear()
                 else:
+                    print("2-2")
                     MERGED02[i].clear()
+                    print()
                     i += 1
                     textState = 0
+                    if text1[0] == "'":
+                        
+                        print(table)
+                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        print(MERGED02[i].tokenName)
+                        print(MERGED02[i].Sigma)
+                        
 
     #3) 숫자가 들어올 때
     elif text1[textState] in OPERATOR or text1[0] in DIGIT:
+        print("3")
         print("%%%")
         for i in range(len(MERGED3)):
             while textState < len(text1) and MERGED3[i].checkIng(text1[textState]) == 1:
@@ -695,7 +715,7 @@ while len(text1) > 0:
                 for _ in range(textState):
                     subStr += text1.popleft()
                 print(">>>",subStr)
-                if subStr[0]=="-":
+                if subStr[0]=="-": #MINUS PROBLEM
                     table.append(["OPERATOR", subStr[0]])
                     table.append([MERGED3[i].acceptedToken(), subStr[1:]])
                 else:
@@ -708,6 +728,7 @@ while len(text1) > 0:
                 textState = 0
 
     elif text1[textState] in WHITESPACE :
+        print("4")
         for i in range(len(MERGED5)):
             while textState < len(text1) and MERGED5[i].wscheckIng(text1[textState]) == 1:
                 MERGED5[i].nextState(text1[textState])
@@ -732,6 +753,7 @@ while len(text1) > 0:
                 textState = 0
 
     else :
+        print("5")
         print("text:",text1[textState])
         subStr = ""
         subStr += text1.popleft()
