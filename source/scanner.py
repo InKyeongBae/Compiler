@@ -20,3 +20,29 @@ for i in range(len(input)) :
 
 
 f.close()
+
+
+#2) 문자가 들어올 때 해결 X
+    elif text1[textState] in LETTER :
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        for i in range(len(MERGED02)):
+            while textState < len(text1) and MERGED02[i].checkIng(text1[textState]) == 1:
+                MERGED02[i].nextState(text1[textState])
+                print("isIng :", MERGED02[i].isIng)
+                if MERGED02[i].isIng == 1:
+                    textState += 1
+                else:
+                    break
+                # print("!!!!!!", textState)
+
+            if MERGED02[i].isAccepted():
+                subStr = ""
+                for _ in range(textState):
+                    subStr += text1.popleft()
+                table.append([MERGED02[i].acceptedToken(), subStr])
+                textState = 0
+                MERGED02[i].clear()
+            else:
+                MERGED02[i].clear()
+                i += 1
+                textState = 0

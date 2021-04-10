@@ -6,8 +6,6 @@ OPERATOR = ['-', '+', '*', '/']
 
 WHITESPACE = ['\t', '\n', ' ']
 
-SEMICOLON = ';'
-COMMA = ','
 BLANK = ' '
 
 # Alphabet Definition
@@ -54,6 +52,27 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
                 isAlpha = 0
             # 이렇게 하면 나중에 whitespace 어떡하지...ㅠㅠ
             elif input == ' ':
+                isAlpha = 0
+            else:
+                isAlpha = 1
+                break
+        if isAlpha == 0:
+            print(f'{input}: undefined alphabet')
+            self.isIng = 0
+        else:
+            print(f'{input}: defined alphabet')
+            self.isIng = 1
+
+        if self.isIng == 0:
+            # print(f'{input}: automata dead')
+            return self.isIng
+        else:
+            return self.isIng
+
+    def wscheckIng(self, input):
+        isAlpha = 0
+        for i in self.Sigma:
+            if input not in i:
                 isAlpha = 0
             else:
                 isAlpha = 1
@@ -139,20 +158,6 @@ Integer = FiniteAutomata(
     }
 )
 
-inputs = "1"
-Integer = FiniteAutomata(
-    "INTEGER",  # matched token name
-    ["T0", "T1", "T2", "T3", "T4"],  # state
-    ["-", "0", str(POS_DIGIT), str(DIGIT)],  # input stream
-    ["T2", "T3", "T4"],  # accepted state
-    {  # nfa to dfa transition table
-        "T0": ["T1", "T2", "T3", ""],
-        "T1": ["", "", "T3", ""],
-        "T2": ["", "", "", ""],
-        "T3": ["", "", "", "T4"],
-        "T4": ["", "", "", "T4"]
-    }
-)
 
 Whitespace = FiniteAutomata(
     "WHITESPACE",  # matched token name
@@ -347,7 +352,7 @@ Keyword = FiniteAutomata(
 Literal = FiniteAutomata(
     "LITERAL",  # matched token name
     ["T0", "T1", "T2", "T3", "T4", "T5"],  # state
-    ["\"", str(DIGIT), str(DIGIT), str(BLANK)],  # input stream
+    ['"', str(DIGIT), str(LETTER), str(BLANK)],  # input stream
     ["T5"],  # accepted state
     {  # nfa to dfa transition table
         "T0": ["T1", "", "", ""],
@@ -406,7 +411,7 @@ Lbrace = FiniteAutomata(
 Rbrace = FiniteAutomata(
     "RBRACE",  # matched token name
     ["T0", "T1"],  # state
-    [";"],  # input stream
+    ["}"],  # input stream
     ["T1"],  # accepted state
     {  # nfa to dfa transition table
         "T0": ["T1"],
@@ -468,11 +473,104 @@ Assign = FiniteAutomata(
         "T1": [""]
     }
 )
+
+TTrue = FiniteAutomata(
+    "TRUE",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4"],  # state
+    ["t", "r", "u", "e"],  # input stream
+    ["T4"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", ""],
+        "T1": ["", "T2", "", ""],
+        "T2": ["", "", "T3", ""],
+        "T3": ["", "", "", "T4"],
+        "T4": ["", "", "", ""],
+    }
+)
+
+TFalse = FiniteAutomata(
+    "FALSE",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5"],  # state
+    ["f", "a", "l", "s", "e"],  # input stream
+    ["T5"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", "", ""],
+        "T1": ["", "T2", "", "", ""],
+        "T2": ["", "", "T3", "", ""],
+        "T3": ["", "", "", "T4", ""],
+        "T4": ["", "", "", "", "T5"],
+        "T5": ["", "", "", "", ""]
+    }
+)
+
+TInt = FiniteAutomata(
+    "INT",  # matched token name
+    ["T0", "T1", "T2", "T3"],  # state
+    ["i", "n", "t"],  # input stream
+    ["T3"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", ""],
+        "T1": ["", "T2", ""],
+        "T2": ["", "", "T3"],
+        "T3": ["", "", ""],
+    }
+)
+
+TChar = FiniteAutomata(
+    "CHAR",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4"],  # state
+    ["c", "h", "a", "r"],  # input stream
+    ["T4"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", ""],
+        "T1": ["", "T2", "", ""],
+        "T2": ["", "", "T3", ""],
+        "T3": ["", "", "", "T4"],
+        "T4": ["", "", "", ""],
+    }
+)
+
+TBoolean = FiniteAutomata(
+    "BOOLEAN",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5", "T6", "T7"],  # state
+    ["b", "o", "l", "e", "a", "n"],  # input stream
+    ["T7"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", "", "", ""],
+        "T1": ["", "T2", "", "", "", ""],
+        "T2": ["", "T3", "", "", "", ""],
+        "T3": ["", "", "T4", "", "", ""],
+        "T4": ["", "", "", "T5", "", ""],
+        "T5": ["", "", "", "", "T6", ""],
+        "T6": ["", "", "", "", "", "T7"],
+        "T7": ["", "", "", "", "", ""],
+    }
+)
+
+TString = FiniteAutomata(
+    "STRING",  # matched token name
+    ["T0", "T1", "T2", "T3", "T4", "T5", "T6"],  # state
+    ["S", "t", "r", "i", "n", "g"],  # input stream
+    ["T6"],  # accepted state
+    {  # nfa to dfa transition table
+        "T0": ["T1", "", "", "", "", ""],
+        "T1": ["", "T2", "", "", "", ""],
+        "T2": ["", "", "T3", "", "", ""],
+        "T3": ["", "", "", "T4", "", ""],
+        "T4": ["", "", "", "", "T5", ""],
+        "T5": ["", "", "", "", "", "T6"],
+        "T6": ["", "", "", "", "", ""]
+    }
+)
+
 #If, Else, While, Class, Return, Minus
-MERGED1 = [Character, Literal, Comma, Lbrace, Rbrace, Lparen, Rparen, Assign, Semicolon, Larray, Rarray, Whitespace]
+MERGED02 = [If, Else, While, Class, Return, TTrue, TFalse, TInt, TChar, TBoolean, TString]
+MERGED1 = [Literal, Character, Comma, Lbrace, Rbrace, Lparen, Rparen, Assign, Semicolon, Larray, Rarray]
 MERGED2 = [Keyword, Boolean, Type, Identifier]
 MERGED3 = [Integer, Operator]
-MERGED4 = [Assign, Relop]
+MERGED4 = [Relop, Assign]
+MERGED5 = [Whitespace]
+
 
 # print(MERGED[0].Delta)
 # print("----------------------------------")
@@ -487,53 +585,55 @@ MERGED4 = [Assign, Relop]
 # MERGED[0].clear()
 
 table = []
-text1 = deque("if")
-
+# text1 = deque("if class int else while class return true false char boolean String")
+text1 = deque('"A djlkajs2jkajsdgj i33" \'a\' &&123')
 textState = 0
+
 while len(text1) > 0:
+    symbols = ["'", '"', ',', '{', '}', '(', ')', '=', ';', '[', ']']
+    symbols = symbols
 
-    if text1[textState] in LETTER :
-        for i in range(len(MERGED2)):
-            # print("Initial state :", MERGED1[i].state)
-            # print("isIng :", MERGED1[i].isIng)
-            while textState < len(text1) and MERGED2[i].checkIng(text1[textState]) == 1:
-                # print(text1[textState])
-                MERGED2[i].nextState(text1[textState])
-                # print("state :", MERGED1[i].state)
-                print("isIng :", MERGED2[i].isIng)
-                if MERGED2[i].isIng == 1:
-                    textState += 1
-                else:
-                    break
-                # print("!!!!!!", textState)
+    if text1[textState] in symbols :
+        for i in range(len(MERGED1)):
+            if i == 0 :
+                while textState < len(text1) and MERGED1[i].wscheckIng(text1[textState]) == 1:
+                    MERGED1[i].nextState(text1[textState])
+                    if MERGED1[i].isIng == 1:
+                        textState += 1
+                    else:
+                        break
+            else :
+                while textState < len(text1) and MERGED1[i].checkIng(text1[textState]) == 1:
+                    MERGED1[i].nextState(text1[textState])
+                    if MERGED1[i].isIng == 1:
+                        textState += 1
+                    else:
+                        break
 
-            if MERGED2[i].isAccepted():
+            if MERGED1[i].isAccepted():
                 subStr = ""
+                text1copy = text1
                 for _ in range(textState):
                     subStr += text1.popleft()
-                table.append([MERGED2[i].acceptedToken(), subStr])
+                print(">>>",subStr)
+                table.append([MERGED1[i].acceptedToken(), subStr])
                 textState = 0
-                MERGED2[i].clear()
+                MERGED1[i].clear()
             else:
-                MERGED2[i].clear()
+                MERGED1[i].clear()
                 i += 1
                 textState = 0
 
-    #2) 숫자가 들어올 때 docs3번째 우선순위들
+
+    #3) 숫자가 들어올 때
     elif text1[textState] in OPERATOR or text1[0] in DIGIT:
         for i in range(len(MERGED3)):
-            # print("Initial state :", MERGED1[i].state)
-            # print("isIng :", MERGED1[i].isIng)
             while textState < len(text1) and MERGED3[i].checkIng(text1[textState]) == 1:
-                # print(text1[textState])
                 MERGED3[i].nextState(text1[textState])
-                # print("state :", MERGED1[i].state)
-                # print("isIng :", MERGED1[i].isIng)
                 if MERGED3[i].isIng == 1:
                     textState += 1
                 else:
                     break
-                # print("!!!!!!", textState)
 
             if MERGED3[i].isAccepted():
                 subStr = ""
@@ -549,28 +649,63 @@ while len(text1) > 0:
                 i += 1
                 textState = 0
 
+    #4) 연산자 들어올 때
+    elif text1[textState] in ["<", "=", "!", ">"] :
+        for i in range(len(MERGED4)):
+            while textState < len(text1) and MERGED4[i].checkIng(text1[textState]) == 1:
+                MERGED4[i].nextState(text1[textState])
+                if MERGED4[i].isIng == 1:
+                    textState += 1
+                else:
+                    break
 
-    #2) elif 문자가 들어올 때 docs2번째 우선순위들
-    elif text1[textState] == '!':
-        subStr = ""
-        subStr += text1.popleft()
-        table.append(["TYPE", subStr])
-        textState = 0
+            if MERGED4[i].isAccepted():
+                subStr = ""
+                text1copy = text1
+                for _ in range(textState):
+                    subStr += text1.popleft()
+                print(">>>",subStr)
+                table.append([MERGED4[i].acceptedToken(), subStr])
+                textState = 0
+                MERGED4[i].clear()
+            else:
+                MERGED4[i].clear()
+                i += 1
+                textState = 0
 
-    #3) elif =가 들어올 때 docs4번째 우선순위들
+    elif text1[textState] in WHITESPACE :
+        for i in range(len(MERGED5)):
+            while textState < len(text1) and MERGED5[i].wscheckIng(text1[textState]) == 1:
+                MERGED5[i].nextState(text1[textState])
+                if MERGED5[i].isIng == 1:
+                    textState += 1
+                else:
+                    break
 
+            if MERGED5[i].isAccepted():
+                subStr = ""
+                text1copy = text1
+                for _ in range(textState):
+                    subStr += text1.popleft()
+                print(">>>",subStr)
+                table.append([MERGED5[i].acceptedToken(), subStr])
+                textState = 0
+                MERGED5[i].clear()
+            else:
+                MERGED5[i].clear()
+                i += 1
+                textState = 0
 
-    #4) elif 하나에서 쭉 돌려보는 거고
-    #4-1) elif {일 때
-    #4-2) elif }일 때
 
     else :
         subStr = ""
         subStr += text1.popleft()
-        table.append(["WHITESPACE", subStr])
+        table.append(["Not Match", subStr])
         textState = 0
 
-print("table:", table)
+print("#############")
+for i in range(len(table)) :
+    print("table:", table[i])
 
 
 
