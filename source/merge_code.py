@@ -72,11 +72,15 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
     def wscheckIng(self, input):
         isAlpha = 0
         for i in self.Sigma:
+            #print(self.Sigma, self.tokenName)
+            #print("---------------------------------------////////", i)
+            
             if input not in i:
                 print("no")
-                print("input:* ",input)
+                #print("input:* ",input)
                 isAlpha = 0
             else:
+                #print("input:* ",input)
                 print("yes!")
                 isAlpha = 1
                 break
@@ -101,11 +105,11 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
                 posNext[key] = value
         keys = posNext.keys()
         newKey = ""
+        inputStr = ""
         for i in keys:
             if input in i:
-                print("---------------------------->",input, "*", i)
                 newKey = i
-
+                #print("nextState", posNext)
         if newKey in posNext:
             nextState = posNext[newKey]
         else:
@@ -579,29 +583,36 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
-file = "'av'"
+file = "av'"
 # text1 = deque("int while if return true false char boolean String")
 text1 = deque(file)
 #int main(){char if123='1';int 0a=a+-1;return -0;}
 
 textState = 0
-
+symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
 while len(text1) > 0:
-    symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
     print("length: ",)
     print("input",text1)
     if text1[textState] in symbols :
         print("1")
         print("@@@@@@@@@")
         for i in range(len(MERGED1)):
+            print("wwwwwwwwwww", MERGED1[i].tokenName)
             if i == 0 :
+                print("1-1")
                 while textState < len(text1) and MERGED1[i].wscheckIng(text1[textState]) == 1:
                     MERGED1[i].nextState(text1[textState])
                     if MERGED1[i].isIng == 1:
+                        print("ifififif")
                         textState += 1
                     else:
+                        print("elseelseelseelseelseelseelseelseelseelseelse")
+                        #if text1[1]=="'":   
                         break
+                    ##
+                    
             else :
+                print("1-2")
                 while textState < len(text1) and MERGED1[i].checkIng(text1[textState]) == 1:
                     MERGED1[i].nextState(text1[textState])
                     if MERGED1[i].isIng == 1:
@@ -610,24 +621,35 @@ while len(text1) > 0:
                         break
 
             if MERGED1[i].isAccepted():
+                print("1-1-1")
                 subStr = ""
                 text1copy = text1
                 for _ in range(textState):
                     subStr += text1.popleft()
                 table.append([MERGED1[i].acceptedToken(), subStr])
                 textState = 0
-                MERGED1[i].clear()
-            elif MERGED1[i].isAccepted() == False:
-                print(text1[textState])
-                print("~!~!~!!!!!")
-                MERGED1[i].clear()
-                
+                MERGED1[i].clear()          
             else:
-                print("####3333###")
+                print("1-1-2")
+                print("####3333###", textState)
                 MERGED1[i].clear()
+                #print("input입니아",text1[textState])
+                #if text1[textState] != "'":
                 i += 1
+                #else:
+                i += 1
+                if text1[textState] == "'":
+                    text1.popleft()
+                    table.append(["error", "'"])
+                    print("'짝이 안 맞는 에러")
                 textState = 0
-
+                #
+        #if MERGED1[i].isAccepted() == False and text1[textState]:
+            #text1.popleft()
+            #textState = 0
+        #else:
+            #textState = 0
+            
     elif text1[textState] in LETTER or text1[textState] == "_":
         print("2")
         for i in range(len(MERGED02)):
