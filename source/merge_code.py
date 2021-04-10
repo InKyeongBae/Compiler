@@ -564,7 +564,8 @@ TString = FiniteAutomata(
 )
 
 #If, Else, While, Class, Return, Minus
-MERGED02 = [Class, If, Else, While, Return, TTrue, TFalse, TInt, TChar, TBoolean, TString, Identifier]
+#boolean keyword type
+MERGED02 = [TTrue, TFalse, Class, If, Else, While, Return, TInt, TChar, TBoolean, TString, Identifier]
 MERGED1 = [Literal, Character, Comma, Lbrace, Rbrace, Lparen, Rparen, Assign, Semicolon, Larray, Rarray]
 MERGED2 = [Keyword, Boolean, Type, Identifier]
 MERGED3 = [Integer, Operator]
@@ -586,7 +587,7 @@ MERGED5 = [Whitespace]
 
 table = []
 # text1 = deque("int while if return true false char boolean String")
-text1 = deque("char123 boolean String 123 char")
+text1 = deque("-(-123)")
 textState = 0
 
 while len(text1) > 0:
@@ -626,7 +627,6 @@ while len(text1) > 0:
 
     elif text1[textState] in LETTER:
         for i in range(len(MERGED02)):
-            print("!!!!!!!!!!", i)
             while textState < len(text1) and MERGED02[i].checkIng(text1[textState]) == 1:
                 MERGED02[i].nextState(text1[textState])
                 if MERGED02[i].isIng == 1:
@@ -640,7 +640,14 @@ while len(text1) > 0:
                     subStr = ""
                     for _ in range(textState):
                         subStr += text1.popleft()
-                    table.append([MERGED02[i].acceptedToken(), subStr])
+                    if i == len(MERGED02) - 1 :
+                        table.append([MERGED02[i].acceptedToken(), subStr])
+                    elif i >= 0 and i < 2 :
+                        table.append(['BOOLEAN', subStr])
+                    elif i >= 2 and i < 7 :
+                        table.append(['KEYWORD', subStr])
+                    else :
+                        table.append(['TYPE', subStr])
                     textState = 0
                     MERGED02[i].clear()
                 else:
@@ -653,7 +660,12 @@ while len(text1) > 0:
                     subStr = ""
                     for _ in range(textState):
                         subStr += text1.popleft()
-                    table.append([MERGED02[i].acceptedToken(), subStr])
+                    if i >= 0 and i < 2:
+                        table.append(['BOOLEAN', subStr])
+                    elif i >= 2 and i < 7:
+                        table.append(['KEYWORD', subStr])
+                    else:
+                        table.append(['TYPE', subStr])
                     textState = 0
                     MERGED02[i].clear()
 
@@ -731,8 +743,7 @@ while len(text1) > 0:
                 text1copy = text1
                 for _ in range(textState):
                     subStr += text1.popleft()
-                print(">>>",subStr)
-                table.append([MERGED5[i].acceptedToken(), subStr])
+                # table.append([MERGED5[i].acceptedToken(), subStr])
                 textState = 0
                 MERGED5[i].clear()
             else:
