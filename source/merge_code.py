@@ -564,7 +564,7 @@ TString = FiniteAutomata(
 )
 
 #If, Else, While, Class, Return, Minus
-MERGED02 = [Class, If, Else, While, Return, TTrue, TFalse, TInt, TChar, TBoolean, TString]
+MERGED02 = [Class, If, Else, While, Return, TTrue, TFalse, TInt, TChar, TBoolean, TString, Identifier]
 MERGED1 = [Literal, Character, Comma, Lbrace, Rbrace, Lparen, Rparen, Assign, Semicolon, Larray, Rarray]
 MERGED2 = [Keyword, Boolean, Type, Identifier]
 MERGED3 = [Integer, Operator]
@@ -586,7 +586,7 @@ MERGED5 = [Whitespace]
 
 table = []
 # text1 = deque("int while if return true false char boolean String")
-text1 = deque("char123 boolean String 123")
+text1 = deque("char123 boolean String 123 char")
 textState = 0
 
 while len(text1) > 0:
@@ -626,6 +626,7 @@ while len(text1) > 0:
 
     elif text1[textState] in LETTER:
         for i in range(len(MERGED02)):
+            print("!!!!!!!!!!", i)
             while textState < len(text1) and MERGED02[i].checkIng(text1[textState]) == 1:
                 MERGED02[i].nextState(text1[textState])
                 if MERGED02[i].isIng == 1:
@@ -633,19 +634,40 @@ while len(text1) > 0:
                 else:
                     break
 
-            if MERGED02[i].isAccepted():
-                subStr = ""
-                for _ in range(textState):
-                    subStr += text1.popleft()
-                table.append([MERGED02[i].acceptedToken(), subStr])
-                textState = 0
-                MERGED02[i].clear()
-                break
-            else:
-                MERGED02[i].clear()
-                i += 1
-                textState = 0
+            #마지막 글자면
+            if textState >= len(text1) :
+                if MERGED02[i].isAccepted():
+                    subStr = ""
+                    for _ in range(textState):
+                        subStr += text1.popleft()
+                    table.append([MERGED02[i].acceptedToken(), subStr])
+                    textState = 0
+                    MERGED02[i].clear()
+                else:
+                    MERGED02[i].clear()
+                    i += 1
+                    textState = 0
+            #
+            else :
+                if MERGED02[i].isAccepted() and text1[textState] == ' ' and i != len(MERGED02) - 1:
+                    subStr = ""
+                    for _ in range(textState):
+                        subStr += text1.popleft()
+                    table.append([MERGED02[i].acceptedToken(), subStr])
+                    textState = 0
+                    MERGED02[i].clear()
 
+                elif MERGED02[i].isAccepted() and i == len(MERGED02) - 1:
+                    subStr = ""
+                    for _ in range(textState):
+                        subStr += text1.popleft()
+                    table.append([MERGED02[i].acceptedToken(), subStr])
+                    textState = 0
+                    MERGED02[i].clear()
+                else:
+                    MERGED02[i].clear()
+                    i += 1
+                    textState = 0
 
     #3) 숫자가 들어올 때
     elif text1[textState] in OPERATOR or text1[0] in DIGIT:
