@@ -320,16 +320,16 @@ Class = FiniteAutomata(
 Return = FiniteAutomata(
     "RETURN",  # matched token name
     ["T0", "T1", "T2", "T3", "T4", "T5", "T6"],  # state
-    ["r", "e", "t", "u", "r", "n"],  # input stream
+    ["r", "e", "t", "u", "n"],  # input stream
     ["T6"],  # accepted state
     {  # nfa to dfa transition table
-        "T0": ["T1", "", "", "", "", ""],
-        "T1": ["", "T2", "", "", "", ""],
-        "T2": ["", "", "T3", "", "", ""],
-        "T3": ["", "", "", "T4", "", ""],
-        "T4": ["", "", "", "", "T5", ""],
-        "T5": ["", "", "", "", "", "T6"],
-        "T6": ["", "", "", "", "", ""]
+        "T0": ["T1", "", "", "", ""],
+        "T1": ["", "T2", "", "", ""],
+        "T2": ["", "", "T3", "", ""],
+        "T3": ["", "", "", "T4", ""],
+        "T4": ["T5", "", "", "", ""],
+        "T5": ["", "", "", "", "T6"],
+        "T6": ["", "", "", "", ""]
     }
 )
 
@@ -564,7 +564,7 @@ TString = FiniteAutomata(
 )
 
 #If, Else, While, Class, Return, Minus
-MERGED02 = [If, Else, While, Class, Return, TTrue, TFalse, TInt, TChar, TBoolean, TString]
+MERGED02 = [Class, If, Else, While, Return, TTrue, TFalse, TInt, TChar, TBoolean, TString]
 MERGED1 = [Literal, Character, Comma, Lbrace, Rbrace, Lparen, Rparen, Assign, Semicolon, Larray, Rarray]
 MERGED2 = [Keyword, Boolean, Type, Identifier]
 MERGED3 = [Integer, Operator]
@@ -585,8 +585,8 @@ MERGED5 = [Whitespace]
 # MERGED[0].clear()
 
 table = []
-# text1 = deque("if class int else while class return true false char boolean String")
-text1 = deque('"A djlkajs2jkajsdgj i33" \'a\' &&123')
+# text1 = deque("int while if return true false char boolean String")
+text1 = deque("char123 boolean String 123")
 textState = 0
 
 while len(text1) > 0:
@@ -621,6 +621,28 @@ while len(text1) > 0:
                 MERGED1[i].clear()
             else:
                 MERGED1[i].clear()
+                i += 1
+                textState = 0
+
+    elif text1[textState] in LETTER:
+        for i in range(len(MERGED02)):
+            while textState < len(text1) and MERGED02[i].checkIng(text1[textState]) == 1:
+                MERGED02[i].nextState(text1[textState])
+                if MERGED02[i].isIng == 1:
+                    textState += 1
+                else:
+                    break
+
+            if MERGED02[i].isAccepted():
+                subStr = ""
+                for _ in range(textState):
+                    subStr += text1.popleft()
+                table.append([MERGED02[i].acceptedToken(), subStr])
+                textState = 0
+                MERGED02[i].clear()
+                break
+            else:
+                MERGED02[i].clear()
                 i += 1
                 textState = 0
 
