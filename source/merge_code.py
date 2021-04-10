@@ -106,11 +106,20 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         keys = posNext.keys()
         newKey = ""
         inputStr = ""
+        print("--------------------->", input)
         for i in keys:
+            if len(i) > 1: #  ast.literal_eval(x), json
+                print("뀨뀨뀨뀨뀨")
+                i = i.strip('][').replace("'", "").split(', ')
+                print("string to list ",i)
             if input in i:
-                newKey = i
-                #print("nextState", posNext)
+                print("없지?", input)
+                print("hey", i, type(i))
+                newKey = str(i)
+        print("nextState", posNext)
         if newKey in posNext:
+            print("wowowowo")
+            print(newKey, type(newKey), type(posNext))
             nextState = posNext[newKey]
         else:
             self.isIng = 0
@@ -583,7 +592,7 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
-file = "av'"
+file = "'ab'"
 # text1 = deque("int while if return true false char boolean String")
 text1 = deque(file)
 #int main(){char if123='1';int 0a=a+-1;return -0;}
@@ -638,10 +647,12 @@ while len(text1) > 0:
                 i += 1
                 #else:
                 i += 1
+                print("흠", textState, text1, i)
                 if text1[textState] == "'":
-                    text1.popleft()
+                    text1.popleft() #여기 왜 2번 돌아가는지 확인하기. 
                     table.append(["error", "'"])
                     print("'짝이 안 맞는 에러")
+                    break
                 textState = 0
                 #
         #if MERGED1[i].isAccepted() == False and text1[textState]:
