@@ -112,15 +112,15 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         newKey = ""
         inputStr = ""
         print("--------------------->", input)
-        print(keys)
+        #print(keys)
         for i in keys:
             if len(i) > 1: #  ast.literal_eval(x), json
                 print("뀨뀨뀨뀨뀨")
                 i = i.strip('][').replace("'", "").split(', ')
-                print("string to list ",i)
+                #print("string to list ",i)
             if input in i:
-                print("없지?", input)
-                print("hey", i, type(i))
+                #print("없지?", input)
+                #print("hey", i, type(i))
                 newKey = str(i)
                 
         
@@ -600,12 +600,13 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
-file = "\"a$\"" #a-1  #1-1, 1+1, -1-123 \"%\"
+file = "a---1" #a-1 a+-1 #1-1, 1+1, -1-123 \"%\"
 # text1 = deque("int while if return true false char boolean String")
 text1 = deque(file)
 #int main(){char if123='1';int 0a=a+-1;return -0;}
 
 textState = 0
+print("처음")
 symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
 while len(text1) > 0:
     print("length: ",)
@@ -742,15 +743,17 @@ while len(text1) > 0:
                         print(MERGED02[i].tokenName)
                         print(MERGED02[i].Sigma)
                         
-
+    
     #3) 숫자가 들어올 때
     elif text1[textState] in OPERATOR or text1[0] in DIGIT:
         print("3")
         print("%%%")
-        
-        for i in range(len(MERGED3)):
-            if table and table[-1][0] == "IDENTIFIER": # MIUS PROBLEM
-                i = 1
+        if table and table[-1][0] == "IDENTIFIER": # MINUS PROBLEM
+            idx = 1
+        if table and table[-1][0] == "OPERATOR" and text1[textState]== "-": # MINUS PROBLEM
+            idx = 0
+        for i in range(idx,len(MERGED3)):
+            
             print("-----------------------------------------------------------", i)
             while textState < len(text1) and MERGED3[i].checkIng(text1[textState]) == 1:
                 print("~~~~~~~~~~~~~~~~~")
