@@ -601,7 +601,7 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
-file = "' 0'" #a-1 a+-1 #1-1, 1+1, -1-123 \"%\"
+file = "'%'" #a-1 a+-1 #1-1, 1+1, -1-123 \"%\"
 # text1 = deque("int while if return true false char boolean String")
 text1 = deque(file)
 #int main(){char if123='1';int 0a=a+-1;return -0;}
