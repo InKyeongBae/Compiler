@@ -48,7 +48,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
     def checkIng(self, input):
         isAlpha = 0
         for i in self.Sigma:
-            print("-------------------------------------/////", input, i)
+            #print("-------------------------------------/////", input, i)
             if input not in i:
                 print("not in")
                 isAlpha = 0
@@ -112,6 +112,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         newKey = ""
         inputStr = ""
         print("--------------------->", input)
+        print(keys)
         for i in keys:
             if len(i) > 1: #  ast.literal_eval(x), json
                 print("뀨뀨뀨뀨뀨")
@@ -121,6 +122,8 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
                 print("없지?", input)
                 print("hey", i, type(i))
                 newKey = str(i)
+                
+        
         #print("nextState", posNext)
         if newKey in posNext:
             print("wowowowo")
@@ -380,7 +383,7 @@ Literal = FiniteAutomata(
     ["T5"],  # accepted state
     {  # nfa to dfa transition table
         "T0": ["T1", "", "", ""],
-        "T1": ["", "T2", "T3", "T4"],
+        "T1": ["T5", "T2", "T3", "T4"],
         "T2": ["T5", "T2", "T3", "T4"],
         "T3": ["T5", "T2", "T3", "T4"],
         "T4": ["T5", "T2", "T3", "T4"],
@@ -597,7 +600,7 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
-file = "-1-1" #a-1  #1-1, 1+1, -1-123
+file = "\"a$\"" #a-1  #1-1, 1+1, -1-123 \"%\"
 # text1 = deque("int while if return true false char boolean String")
 text1 = deque(file)
 #int main(){char if123='1';int 0a=a+-1;return -0;}
@@ -632,6 +635,7 @@ while len(text1) > 0:
                     if MERGED1[i].isIng == 1:
                         textState += 1
                     else:
+                        print("breakbreak")
                         break
 
             if MERGED1[i].isAccepted():
@@ -639,7 +643,10 @@ while len(text1) > 0:
                 subStr = ""
                 text1copy = text1
                 for _ in range(textState):
+                    #print(text1[_])
                     subStr += text1.popleft()
+                    
+                print(">>>", subStr, textState)
                 table.append([MERGED1[i].acceptedToken(), subStr])
                 textState = 0
                 MERGED1[i].clear()          
@@ -647,24 +654,26 @@ while len(text1) > 0:
                 print("1-1-2")
                 print("####3333###", textState)
                 MERGED1[i].clear()
-                #print("input입니아",text1[textState])
-                #if text1[textState] != "'":
-                i += 1
-                #else:
-                i += 1
                 print("흠", textState, text1, i)
-                if text1[textState] == "'":
-                    text1.popleft() #여기 왜 2번 돌아가는지 확인하기. 
-                    table.append(["error", "'"])
-                    print("'짝이 안 맞는 에러")
-                    break
+                if text1:
+                    if MERGED1[i].tokenName == "CHARACTER" and text1[0] == "'":
+                        text1.popleft() 
+                        table.append(["Not Matched", "'"])
+                        # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
+                        print("'짝이 안 맞는 에러")
+                        i = 0
+                        break
+                    elif MERGED1[i].tokenName == "LITERAL" and text1[0] == '"':
+                        text1.popleft() 
+                        table.append(["Not Matched", '"'])
+                        # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
+                        print("'짝이 안 맞는 에러")
+                        i = 0
+                        break
+                    
+                i += 1
                 textState = 0
-                #
-        #if MERGED1[i].isAccepted() == False and text1[textState]:
-            #text1.popleft()
-            #textState = 0
-        #else:
-            #textState = 0
+
             
     elif text1[textState] in LETTER or text1[textState] == "_":
         print("2")
@@ -823,7 +832,7 @@ while len(text1) > 0:
         print("text:",text1[textState])
         subStr = ""
         subStr += text1.popleft()
-        table.append(["Not Match", subStr])
+        table.append(["Not Match", subStr]) #없는 글자 처리해줌. 
         textState = 0
 
 print("#############")
