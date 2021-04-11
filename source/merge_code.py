@@ -48,11 +48,15 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
     def checkIng(self, input):
         isAlpha = 0
         for i in self.Sigma:
+            print("-------------------------------------/////", input, i)
             if input not in i:
+                print("not in")
                 isAlpha = 0
             elif input == ' ':
+                print("blank")
                 isAlpha = 0
             else:
+                print("in")
                 isAlpha = 1
                 break
         print("checkIng input:", input)
@@ -71,6 +75,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
 
     def wscheckIng(self, input):
         isAlpha = 0
+        print("wschecking")
         for i in self.Sigma:
             #print(self.Sigma, self.tokenName)
             #print("---------------------------------------////////", i)
@@ -116,7 +121,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
                 print("없지?", input)
                 print("hey", i, type(i))
                 newKey = str(i)
-        print("nextState", posNext)
+        #print("nextState", posNext)
         if newKey in posNext:
             print("wowowowo")
             print(newKey, type(newKey), type(posNext))
@@ -592,7 +597,7 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
-file = "'ab'"
+file = "-1-1" #a-1  #1-1, 1+1, -1-123
 # text1 = deque("int while if return true false char boolean String")
 text1 = deque(file)
 #int main(){char if123='1';int 0a=a+-1;return -0;}
@@ -733,32 +738,60 @@ while len(text1) > 0:
     elif text1[textState] in OPERATOR or text1[0] in DIGIT:
         print("3")
         print("%%%")
+        
         for i in range(len(MERGED3)):
+            if table and table[-1][0] == "IDENTIFIER": # MIUS PROBLEM
+                i = 1
+            print("-----------------------------------------------------------", i)
             while textState < len(text1) and MERGED3[i].checkIng(text1[textState]) == 1:
+                print("~~~~~~~~~~~~~~~~~")
                 MERGED3[i].nextState(text1[textState])
                 if MERGED3[i].isIng == 1:
+                    print("if")
                     textState += 1
-                else:
+                    #if 
+                    #i = 0 # ?
+                else: #accaept이 안됨. 
+                    print("else")
                     break
 
+            #MERGED를 다 돈게 아닌 상태에서 넘어감. 
             if MERGED3[i].isAccepted():
-                print("&&**&&: ", text1[textState-1])
+                print("&&**&&: ")#, text1[textState-1])
                 subStr = ""
                 text1copy = text1
+                print("엥구")
+                #if textState == 0: #MINUS PROBLEM -1 #for operator "-" ex) 1-1
+                #    subStr += text1.popleft()
+
                 for _ in range(textState):
-                    subStr += text1.popleft()
+                    print("엥구")
+                    subStr += text1.popleft()  #1
+                    
                 print(">>>",subStr)
-                if subStr[0]=="-": #MINUS PROBLEM
-                    table.append(["OPERATOR", subStr[0]])
-                    table.append([MERGED3[i].acceptedToken(), subStr[1:]])
-                else:
-                    table.append([MERGED3[i].acceptedToken(), subStr])
+                #print(text1)
+                #if text1[0] == "-": #MINUS PROBLEM -2 #
+                #    if table[-1][0] == "IDENTIFIER":
+                #        table.append(["OPERATOR", subStr[0]])
+                #        table.append([MERGED3[i].acceptedToken(), subStr[1:]])
+                #else:
+                
+                table.append([MERGED3[i].acceptedToken(), subStr])
                 textState = 0
                 MERGED3[i].clear()
+
+                if MERGED3[i].tokenName == "INTEGER":
+                    i = 1
+                    print("제발제발제발제발요")
+                else:
+                    i = 0
+
+                print(i, MERGED3[i].tokenName)
             else:
                 MERGED3[i].clear()
                 i += 1
                 textState = 0
+                
 
     elif text1[textState] in WHITESPACE :
         print("4")
