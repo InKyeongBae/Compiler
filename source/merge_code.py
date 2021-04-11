@@ -48,12 +48,13 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
     def checkIng(self, input):
         isAlpha = 0
         for i in self.Sigma:
-            #print("-------------------------------------/////", input, i)
+            print("-------------------------------------/////", input, i)
             if input not in i:
                 print("not in")
                 isAlpha = 0
             elif input == ' ':
                 print("blank")
+                #
                 isAlpha = 0
             else:
                 print("in")
@@ -78,11 +79,11 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         print("wschecking")
         for i in self.Sigma:
             #print(self.Sigma, self.tokenName)
-            #print("---------------------------------------////////", i)
+            print("---------------------------------------////////", i)
             
             if input not in i:
                 print("no")
-                #print("input:* ",input)
+                print("input:* ",input)
                 isAlpha = 0
             else:
                 #print("input:* ",input)
@@ -218,7 +219,7 @@ Character = FiniteAutomata(
     ["T5"],  # accepted state
     {  # nfa to dfa transition table
         "T0": ["T1", "", "", ""],
-        "T1": ["T5", "T2", "T3", "T4"],
+        "T1": ["", "T2", "T3", "T4"],
         "T2": ["T5", "", "", ""],
         "T3": ["T5", "", "", ""],
         "T4": ["T5", "", "", ""],
@@ -600,7 +601,7 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
-file = "a---1" #a-1 a+-1 #1-1, 1+1, -1-123 \"%\"
+file = "' 0'" #a-1 a+-1 #1-1, 1+1, -1-123 \"%\"
 # text1 = deque("int while if return true false char boolean String")
 text1 = deque(file)
 #int main(){char if123='1';int 0a=a+-1;return -0;}
@@ -624,8 +625,6 @@ while len(text1) > 0:
                         print("ifififif")
                         textState += 1
                     else:
-                        print("elseelseelseelseelseelseelseelseelseelseelse")
-                        #if text1[1]=="'":   
                         break
                     ##
                     
@@ -634,9 +633,16 @@ while len(text1) > 0:
                 while textState < len(text1) and MERGED1[i].checkIng(text1[textState]) == 1:
                     MERGED1[i].nextState(text1[textState])
                     if MERGED1[i].isIng == 1:
+                        print("godgodgod")
                         textState += 1
+                        #print(MERGED1[i].tokenName, text1[textState])
+                        if MERGED1[i].tokenName == "CHARACTER" and textState < len(text1) and text1[textState] == BLANK:
+                            MERGED1[i].nextState(text1[textState])
+                            textState += 1
+                            print("공백")
+                            #MERGED1[i].isAlpha = 1
                     else:
-                        print("breakbreak")
+                        print("000000010111")
                         break
 
             if MERGED1[i].isAccepted():
@@ -706,7 +712,6 @@ while len(text1) > 0:
                     MERGED02[i].clear()
                     i += 1
                     textState = 0
-            # - 는 앞 뒤 내용에 따라 달라짐. (연산자 일 때)
             else :
                 if MERGED02[i].isAccepted() and text1[textState] == ' ' and i != len(MERGED02) - 1:
                     print("2-0")
@@ -729,7 +734,7 @@ while len(text1) > 0:
                         subStr += text1.popleft()
                     table.append([MERGED02[i].acceptedToken(), subStr])
                     textState = 0
-                    MERGED02[i].clear()
+                    MERGED02[i].clear()                    
                 else:
                     print("2-2")
                     MERGED02[i].clear()
@@ -748,6 +753,7 @@ while len(text1) > 0:
     elif text1[textState] in OPERATOR or text1[0] in DIGIT:
         print("3")
         print("%%%")
+        idx = 0
         if table and table[-1][0] == "IDENTIFIER": # MINUS PROBLEM
             idx = 1
         if table and table[-1][0] == "OPERATOR" and text1[textState]== "-": # MINUS PROBLEM
