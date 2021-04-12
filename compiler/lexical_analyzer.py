@@ -20,7 +20,7 @@ def filewrite(file, string):
 
 # 일단 input 내용 그대로 out으로 나오도록
 for inputStr in inputline :
-
+    print("#######################################")
     table = []
     inputline = inputStr
     print("input :", inputline)
@@ -114,7 +114,7 @@ for inputStr in inputline :
                         i += 1
                         textState = 0
                 else:
-                    if MERGED2[i].isAccepted() and text1[textState] == ' ' and i != len(MERGED2) - 1:
+                    if MERGED2[i].isAccepted() and (text1[textState] == ' ' or text1[textState] != '_' or text1[textState] not in LETTER or text1[textState] not in DIGIT) and i != len(MERGED2) - 1:
                         subStr = ""
                         for _ in range(textState):
                             subStr += text1.popleft()
@@ -223,7 +223,7 @@ for inputStr in inputline :
             table.append(["Not Match", subStr])  # 없는 글자 처리해줌.
             textState = 0
 
-    print("#######################################")
+
     for i in range(len(table)):
         print("table:", table[i])
 
