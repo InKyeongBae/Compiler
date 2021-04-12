@@ -9,7 +9,7 @@ WHITESPACE = ['\t', '\n', ' ']
 BLANK = ' '
 
 # Alphabet Definition
-LETTER = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q,' 'R', 'S', 'T', 'U',
+LETTER = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
           'V', 'W', 'X', 'Y', 'Z',
           'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
           'v', 'w', 'x', 'y', 'z']
@@ -48,13 +48,19 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
     def checkIng(self, input):
         isAlpha = 0
         for i in self.Sigma:
+            print("-------------------------------------/////", input, i)
             if input not in i:
+                print("not in")
                 isAlpha = 0
             elif input == ' ':
+                print("blank")
+                #
                 isAlpha = 0
             else:
+                print("in")
                 isAlpha = 1
                 break
+        print("checkIng input:", input)
         if isAlpha == 0:
             print(f'{input}: undefined alphabet')
             self.isIng = 0
@@ -70,10 +76,18 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
 
     def wscheckIng(self, input):
         isAlpha = 0
+        print("wschecking")
         for i in self.Sigma:
+            #print(self.Sigma, self.tokenName)
+            print("---------------------------------------////////", i)
+            
             if input not in i:
+                print("no")
+                print("input:* ",input)
                 isAlpha = 0
             else:
+                #print("input:* ",input)
+                print("yes!")
                 isAlpha = 1
                 break
         if isAlpha == 0:
@@ -97,11 +111,24 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
                 posNext[key] = value
         keys = posNext.keys()
         newKey = ""
+        inputStr = ""
+        print("--------------------->", input)
+        #print(keys)
         for i in keys:
+            if len(i) > 1: #  ast.literal_eval(x), json
+                print("뀨뀨뀨뀨뀨")
+                i = i.strip('][').replace("'", "").split(', ')
+                #print("string to list ",i)
             if input in i:
-                newKey = i
-
+                #print("없지?", input)
+                #print("hey", i, type(i))
+                newKey = str(i)
+                
+        
+        #print("nextState", posNext)
         if newKey in posNext:
+            print("wowowowo")
+            print(newKey, type(newKey), type(posNext))
             nextState = posNext[newKey]
         else:
             self.isIng = 0
@@ -357,7 +384,7 @@ Literal = FiniteAutomata(
     ["T5"],  # accepted state
     {  # nfa to dfa transition table
         "T0": ["T1", "", "", ""],
-        "T1": ["", "T2", "T3", "T4"],
+        "T1": ["T5", "T2", "T3", "T4"],
         "T2": ["T5", "T2", "T3", "T4"],
         "T3": ["T5", "T2", "T3", "T4"],
         "T4": ["T5", "T2", "T3", "T4"],
@@ -574,45 +601,89 @@ MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
 table = []
+file = "'%'" #a-1 a+-1 #1-1, 1+1, -1-123 \"%\"
 # text1 = deque("int while if return true false char boolean String")
-text1 = deque("--123")
+text1 = deque(file)
+#int main(){char if123='1';int 0a=a+-1;return -0;}
 
 textState = 0
-
+print("처음")
+symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
 while len(text1) > 0:
-    symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
-
+    print("length: ",)
+    print("input",text1)
     if text1[textState] in symbols :
+        print("1")
+        print("@@@@@@@@@")
         for i in range(len(MERGED1)):
+            print("wwwwwwwwwww", MERGED1[i].tokenName)
             if i == 0 :
+                print("1-1")
                 while textState < len(text1) and MERGED1[i].wscheckIng(text1[textState]) == 1:
                     MERGED1[i].nextState(text1[textState])
                     if MERGED1[i].isIng == 1:
+                        print("ifififif")
                         textState += 1
                     else:
                         break
+                    ##
+                    
             else :
+                print("1-2")
                 while textState < len(text1) and MERGED1[i].checkIng(text1[textState]) == 1:
                     MERGED1[i].nextState(text1[textState])
                     if MERGED1[i].isIng == 1:
+                        print("godgodgod")
                         textState += 1
+                        #print(MERGED1[i].tokenName, text1[textState])
+                        if MERGED1[i].tokenName == "CHARACTER" and textState < len(text1) and text1[textState] == BLANK:
+                            MERGED1[i].nextState(text1[textState])
+                            textState += 1
+                            print("공백")
+                            #MERGED1[i].isAlpha = 1
                     else:
+                        print("000000010111")
                         break
 
             if MERGED1[i].isAccepted():
+                print("1-1-1")
                 subStr = ""
                 text1copy = text1
                 for _ in range(textState):
+                    #print(text1[_])
                     subStr += text1.popleft()
+                    
+                print(">>>", subStr, textState)
                 table.append([MERGED1[i].acceptedToken(), subStr])
                 textState = 0
-                MERGED1[i].clear()
+                MERGED1[i].clear()          
             else:
+                print("1-1-2")
+                print("####3333###", textState)
                 MERGED1[i].clear()
+                print("흠", textState, text1, i)
+                if text1:
+                    if MERGED1[i].tokenName == "CHARACTER" and text1[0] == "'":
+                        text1.popleft() 
+                        table.append(["Not Matched", "'"])
+                        # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
+                        print("'짝이 안 맞는 에러")
+                        i = 0
+                        break
+                    elif MERGED1[i].tokenName == "LITERAL" and text1[0] == '"':
+                        text1.popleft() 
+                        table.append(["Not Matched", '"'])
+                        # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
+                        print("'짝이 안 맞는 에러")
+                        i = 0
+                        break
+                    
                 i += 1
                 textState = 0
 
-    elif text1[textState] in LETTER:
+            
+    elif text1[textState] in LETTER or text1[textState] == "_":
+        print("2")
         for i in range(len(MERGED02)):
             while textState < len(text1) and MERGED02[i].checkIng(text1[textState]) == 1:
                 MERGED02[i].nextState(text1[textState])
@@ -641,9 +712,9 @@ while len(text1) > 0:
                     MERGED02[i].clear()
                     i += 1
                     textState = 0
-            #
             else :
                 if MERGED02[i].isAccepted() and text1[textState] == ' ' and i != len(MERGED02) - 1:
+                    print("2-0")
                     subStr = ""
                     for _ in range(textState):
                         subStr += text1.popleft()
@@ -657,52 +728,102 @@ while len(text1) > 0:
                     MERGED02[i].clear()
 
                 elif MERGED02[i].isAccepted() and i == len(MERGED02) - 1:
+                    print("2-1")
                     subStr = ""
                     for _ in range(textState):
                         subStr += text1.popleft()
                     table.append([MERGED02[i].acceptedToken(), subStr])
                     textState = 0
-                    MERGED02[i].clear()
+                    MERGED02[i].clear()                    
                 else:
+                    print("2-2")
                     MERGED02[i].clear()
+                    print()
                     i += 1
                     textState = 0
-
+                    if text1[0] == "'":
+                        
+                        print(table)
+                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        print(MERGED02[i].tokenName)
+                        print(MERGED02[i].Sigma)
+                        
+    
     #3) 숫자가 들어올 때
     elif text1[textState] in OPERATOR or text1[0] in DIGIT:
-
-        for i in range(len(MERGED3)):
+        print("3")
+        print("%%%")
+        idx = 0
+        if table and table[-1][0] == "IDENTIFIER": # MINUS PROBLEM
+            idx = 1
+        if table and table[-1][0] == "OPERATOR" and text1[textState]== "-": # MINUS PROBLEM
+            idx = 0
+        for i in range(idx,len(MERGED3)):
+            
+            print("-----------------------------------------------------------", i)
             while textState < len(text1) and MERGED3[i].checkIng(text1[textState]) == 1:
+                print("~~~~~~~~~~~~~~~~~")
                 MERGED3[i].nextState(text1[textState])
                 if MERGED3[i].isIng == 1:
+                    print("if")
                     textState += 1
-                else:
+                    #if 
+                    #i = 0 # ?
+                else: #accaept이 안됨. 
+                    print("else")
                     break
 
+            #MERGED를 다 돈게 아닌 상태에서 넘어감. 
             if MERGED3[i].isAccepted():
+                print("&&**&&: ")#, text1[textState-1])
                 subStr = ""
                 text1copy = text1
+                print("엥구")
+                #if textState == 0: #MINUS PROBLEM -1 #for operator "-" ex) 1-1
+                #    subStr += text1.popleft()
+
                 for _ in range(textState):
-                    subStr += text1.popleft()
+                    print("엥구")
+                    subStr += text1.popleft()  #1
+                    
                 print(">>>",subStr)
+                #print(text1)
+                #if text1[0] == "-": #MINUS PROBLEM -2 #
+                #    if table[-1][0] == "IDENTIFIER":
+                #        table.append(["OPERATOR", subStr[0]])
+                #        table.append([MERGED3[i].acceptedToken(), subStr[1:]])
+                #else:
+                
                 table.append([MERGED3[i].acceptedToken(), subStr])
                 textState = 0
                 MERGED3[i].clear()
+
+                if MERGED3[i].tokenName == "INTEGER":
+                    i = 1
+                    print("제발제발제발제발요")
+                else:
+                    i = 0
+
+                print(i, MERGED3[i].tokenName)
             else:
                 MERGED3[i].clear()
                 i += 1
                 textState = 0
+                
 
     elif text1[textState] in WHITESPACE :
+        print("4")
         for i in range(len(MERGED5)):
             while textState < len(text1) and MERGED5[i].wscheckIng(text1[textState]) == 1:
                 MERGED5[i].nextState(text1[textState])
                 if MERGED5[i].isIng == 1:
                     textState += 1
+                    print("$$")
                 else:
                     break
 
             if MERGED5[i].isAccepted():
+                print("#2")
                 subStr = ""
                 text1copy = text1
                 for _ in range(textState):
@@ -716,9 +837,11 @@ while len(text1) > 0:
                 textState = 0
 
     else :
+        print("5")
+        print("text:",text1[textState])
         subStr = ""
         subStr += text1.popleft()
-        table.append(["Not Match", subStr])
+        table.append(["Not Match", subStr]) #없는 글자 처리해줌. 
         textState = 0
 
 print("#############")
