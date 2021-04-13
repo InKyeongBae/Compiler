@@ -51,6 +51,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         isAlpha = 0
         for i in self.Sigma:
             if input not in i:
+                print(input, i)
                 isAlpha = 0
             elif input == ' ':
                 isAlpha = 0
