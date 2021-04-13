@@ -164,11 +164,6 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
                         MERGED2[i].clear()
                         i += 1
                         textState = 0
-                        if text1[0] == "'":
-                            print(table)
-                            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                            print(MERGED2[i].tokenName)
-                            print(MERGED2[i].Sigma)
 
 
         # 3) 숫자가 들어올 때
@@ -188,7 +183,6 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
 
                 # MERGED를 다 돈게 아닌 상태에서 넘어감.
                 if MERGED3[i].isAccepted():
-                    print("accept")
 
                     subStr = ""
                     text1copy = text1
@@ -214,8 +208,7 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
                         i = 1
                     else:
                         i = 0
-
-                    print(i, MERGED3[i].tokenName)
+                        
                 else:
                     MERGED3[i].clear()
                     i += 1
