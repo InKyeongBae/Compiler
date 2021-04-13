@@ -8,21 +8,26 @@ MERGED3 = [Integer, Operator]
 MERGED4 = [Relop, Assign]
 MERGED5 = [Whitespace]
 
-#file I/O
-f = open(sys.argv[1],'r')
+# file I/O
+f = open(sys.argv[1], 'r')
 inputline = f.readlines()
 filename = sys.argv[1]
 # 일단 txt로 나오게 추후에 out으로 수정
-file_out = open(f"{filename.replace('.java', '')}.txt",'w')
+file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+
+
 def filewrite(file, string):
     # print(string)
-    file.write(string+"\n")
+    file.write(string)
+
+
+
 
 # error report
 error_line = 0
 
 # 일단 input 내용 그대로 out으로 나오도록
-for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
+for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
     print("###############"
           "########################")
     table = []
@@ -54,7 +59,8 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
                         MERGED1[i].nextState(text1[textState])
                         if MERGED1[i].isIng == 1:
                             textState += 1
-                            if MERGED1[i].tokenName == "CHARACTER" and textState < len(text1) and text1[textState] == BLANK[0]:
+                            if MERGED1[i].tokenName == "CHARACTER" and textState < len(text1) and text1[textState] == \
+                                    BLANK[0]:
                                 MERGED1[i].nextState(text1[textState])
                                 textState += 1
                         else:
@@ -83,7 +89,7 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
                             print(inputline.rstrip('\n'))
                             for index in range(error_num):
                                 error.append(" ")
-                            error[error_num-1] = "^"
+                            error[error_num - 1] = "^"
                             print(''.join(error))
 
                             i = 0
@@ -98,7 +104,7 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
                             print(inputline.rstrip('\n'))
                             for index in range(error_num):
                                 error.append(" ")
-                            error[error_num-1] = "^"
+                            error[error_num - 1] = "^"
                             print(''.join(error))
                             i = 0
                             textState = 0
@@ -139,7 +145,9 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
                         i += 1
                         textState = 0
                 else:
-                    if MERGED2[i].isAccepted() and (text1[textState] == ' ' or text1[textState] != '_' or text1[textState] not in LETTER or text1[textState] not in DIGIT) and i != len(MERGED2) - 1:
+                    if MERGED2[i].isAccepted() and (
+                            text1[textState] == ' ' or text1[textState] != '_' or text1[textState] not in LETTER or
+                            text1[textState] not in DIGIT) and i != len(MERGED2) - 1:
                         subStr = ""
                         for _ in range(textState):
                             subStr += text1.popleft()
@@ -208,7 +216,7 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
                         i = 1
                     else:
                         i = 0
-                        
+
                 else:
                     MERGED3[i].clear()
                     i += 1
@@ -221,6 +229,7 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
                     MERGED5[i].nextState(text1[textState])
                     if MERGED5[i].isIng == 1:
                         textState += 1
+                        error_num = error_num + 1
                     else:
                         break
 
@@ -243,19 +252,21 @@ for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
             subStr += text1.popleft()
             error_num = error_num + 1
             table.append(["Not Match", subStr])  # 없는 글자 처리해줌.
-            print("ERROR: There is a letter", subStr, "is not acceptable. line:", error_line)
+            printStr = "ERROR: There is a letter" + subStr + "is not acceptable. line:" + str(error_line)
+            print(printStr)
             print(inputline.rstrip('\n'))
+            filewrite(file_out, printStr)
+            filewrite(file_out, "\n")
             for index in range(error_num):
                 error.append(" ")
-            error[error_num-1] = "^"
+            error[error_num - 1] = "^"
             print(''.join(error))
             textState = 0
 
-
-
-    #for i in range(len(table)):
-    #   print("table:", table[i])
-
+    for i in range(len(table)):
+        print("table:", table[i])
+        filewrite(file_out, str(table[i]))
+        filewrite(file_out, "\n")
 
 
 f.close()
