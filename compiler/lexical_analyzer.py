@@ -18,19 +18,26 @@ def filewrite(file, string):
     # print(string)
     file.write(string+"\n")
 
+# error report
+error_line = 0
+
 # 일단 input 내용 그대로 out으로 나오도록
-for inputStr in inputline :
+for inputStr in inputline : ##아래 있는 inputline이랑 왜 다르지?
     print("###############"
           "########################")
     table = []
     inputline = inputStr
     print("input :", inputline)
     text1 = deque(inputline)
-
     textState = 0
+
+    # error report
+    error_line = error_line + 1
+    error_num = 0
+
     symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
     while len(text1) > 0:
-        print("index out of", textState, text1)
+        error = []
         if text1[textState] in symbols:
             for i in range(len(MERGED1)):
                 if i == 0:
@@ -59,6 +66,7 @@ for inputStr in inputline :
                     for _ in range(textState):
                         # print(text1[_])
                         subStr += text1.popleft()
+                        error_num = error_num + 1
 
                     table.append([MERGED1[i].acceptedToken(), subStr])
                     textState = 0
@@ -68,17 +76,30 @@ for inputStr in inputline :
                     if text1:
                         if MERGED1[i].tokenName == "CHARACTER" and text1[0] == "'":
                             text1.popleft()
+                            error_num = error_num + 1
                             table.append(["Not Matched", "'"])
                             # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
-                            print("'짝이 안 맞는 에러")
+                            print("ERROR: is not CHRACTER type, line:", error_line)
+                            print(inputline.rstrip('\n'))
+                            for index in range(error_num):
+                                error.append(" ")
+                            error[error_num-1] = "^"
+                            print(''.join(error))
+
                             i = 0
                             textState = 0
                             break
                         elif MERGED1[i].tokenName == "LITERAL" and text1[0] == '"':
                             text1.popleft()
+                            error_num = error_num + 1
                             table.append(["Not Matched", '"'])
                             # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
-                            print("'짝이 안 맞는 에러")
+                            print('ERROR: is not LITERAL type line:', error_line)
+                            print(inputline.rstrip('\n'))
+                            for index in range(error_num):
+                                error.append(" ")
+                            error[error_num-1] = "^"
+                            print(''.join(error))
                             i = 0
                             textState = 0
                             break
@@ -102,6 +123,7 @@ for inputStr in inputline :
                         subStr = ""
                         for _ in range(textState):
                             subStr += text1.popleft()
+                            error_num = error_num + 1
                         if i == len(MERGED2) - 1:
                             table.append([MERGED2[i].acceptedToken(), subStr])
                         elif i >= 0 and i < 2:
@@ -134,6 +156,7 @@ for inputStr in inputline :
                         subStr = ""
                         for _ in range(textState):
                             subStr += text1.popleft()
+                            error_num = error_num + 1
                         table.append([MERGED2[i].acceptedToken(), subStr])
                         textState = 0
                         MERGED2[i].clear()
@@ -174,6 +197,7 @@ for inputStr in inputline :
 
                     for _ in range(textState):
                         subStr += text1.popleft()  # 1
+                        error_num = error_num + 1
 
                     # print(text1)
                     # if text1[0] == "-": #MINUS PROBLEM -2 #
@@ -212,10 +236,10 @@ for inputStr in inputline :
                     text1copy = text1
                     for _ in range(textState):
                         subStr += text1.popleft()
+                        error_num = error_num + 1
                     # table.append([MERGED5[i].acceptedToken(), subStr])
                     textState = 0
                     MERGED5[i].clear()
-                    print("이럴수가")
                 else:
                     MERGED5[i].clear()
                     i += 1
@@ -224,14 +248,20 @@ for inputStr in inputline :
         else:
             subStr = ""
             subStr += text1.popleft()
+            error_num = error_num + 1
             table.append(["Not Match", subStr])  # 없는 글자 처리해줌.
+            print("ERROR: There is a letter", subStr, "is not acceptable. line:", error_line)
+            print(inputline.rstrip('\n'))
+            for index in range(error_num):
+                error.append(" ")
+            error[error_num-1] = "^"
+            print(''.join(error))
             textState = 0
-        print("여기여기", len(text1), text1, textState)
-        print("##########################")
 
 
-    for i in range(len(table)):
-        print("table:", table[i])
+
+    #for i in range(len(table)):
+    #   print("table:", table[i])
 
 
 
