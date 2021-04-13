@@ -20,7 +20,8 @@ def filewrite(file, string):
 
 # 일단 input 내용 그대로 out으로 나오도록
 for inputStr in inputline :
-    print("#######################################")
+    print("###############"
+          "########################")
     table = []
     inputline = inputStr
     print("input :", inputline)
@@ -29,6 +30,7 @@ for inputStr in inputline :
     textState = 0
     symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
     while len(text1) > 0:
+        print("index out of", textState, text1)
         if text1[textState] in symbols:
             for i in range(len(MERGED1)):
                 if i == 0:
@@ -45,8 +47,7 @@ for inputStr in inputline :
                         MERGED1[i].nextState(text1[textState])
                         if MERGED1[i].isIng == 1:
                             textState += 1
-                            if MERGED1[i].tokenName == "CHARACTER" and textState < len(text1) and text1[
-                                textState] == BLANK:
+                            if MERGED1[i].tokenName == "CHARACTER" and textState < len(text1) and text1[textState] == BLANK[0]:
                                 MERGED1[i].nextState(text1[textState])
                                 textState += 1
                         else:
@@ -71,6 +72,7 @@ for inputStr in inputline :
                             # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
                             print("'짝이 안 맞는 에러")
                             i = 0
+                            textState = 0
                             break
                         elif MERGED1[i].tokenName == "LITERAL" and text1[0] == '"':
                             text1.popleft()
@@ -78,6 +80,7 @@ for inputStr in inputline :
                             # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
                             print("'짝이 안 맞는 에러")
                             i = 0
+                            textState = 0
                             break
 
                     i += 1
@@ -148,7 +151,7 @@ for inputStr in inputline :
         # 3) 숫자가 들어올 때
         elif text1[textState] in OPERATOR or text1[0] in DIGIT:
             idx = 0
-            if table and table[-1][0] == "IDENTIFIER":  # MINUS PROBLEM
+            if table and table[-1][0] == "IDENTIFIER" and text1[textState] == "-":  # MINUS PROBLEM
                 idx = 1
             if table and table[-1][0] == "OPERATOR" and text1[textState] == "-":  # MINUS PROBLEM
                 idx = 0
@@ -157,13 +160,13 @@ for inputStr in inputline :
                     MERGED3[i].nextState(text1[textState])
                     if MERGED3[i].isIng == 1:
                         textState += 1
-                        # if
-                        # i = 0 # ?
                     else:  # accaept이 안됨
                         break
 
                 # MERGED를 다 돈게 아닌 상태에서 넘어감.
                 if MERGED3[i].isAccepted():
+                    print("accept")
+
                     subStr = ""
                     text1copy = text1
                     # if textState == 0: #MINUS PROBLEM -1 #for operator "-" ex) 1-1
@@ -212,6 +215,7 @@ for inputStr in inputline :
                     # table.append([MERGED5[i].acceptedToken(), subStr])
                     textState = 0
                     MERGED5[i].clear()
+                    print("이럴수가")
                 else:
                     MERGED5[i].clear()
                     i += 1
@@ -222,6 +226,8 @@ for inputStr in inputline :
             subStr += text1.popleft()
             table.append(["Not Match", subStr])  # 없는 글자 처리해줌.
             textState = 0
+        print("여기여기", len(text1), text1, textState)
+        print("##########################")
 
 
     for i in range(len(table)):
