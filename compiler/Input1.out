@@ -1,13 +1,1 @@
-['KEYWORD', 'class']
-['IDENTIFIER', 'Name']
-['ASSIGN', '=']
-['LBRACE', '{']
-['RBRACE', '}']
-ERROR: There is a letter.is not acceptable. line:4
-['TYPE', 'int']
-['IDENTIFIER', 'judy']
-['ASSIGN', '=']
-['INTEGER', '3']
-['Not Match', '.']
-['INTEGER', '8']
-['SEMICOLON', ';']
+ERROR: There is a letter "&" is not acceptable. line:2

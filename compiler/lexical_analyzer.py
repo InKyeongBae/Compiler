@@ -12,19 +12,17 @@ MERGED5 = [Whitespace]
 f = open(sys.argv[1], 'r')
 inputline = f.readlines()
 filename = sys.argv[1]
-# 일단 txt로 나오게 추후에 out으로 수정
+
 file_out = open(f"{filename.replace('.java', '')}.out", 'w')
 
 
+
 def filewrite(file, string):
-    # print(string)
     file.write(string)
-
-
-
 
 # error report
 error_line = 0
+is_error = 0
 
 # 일단 input 내용 그대로 out으로 나오도록
 for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
@@ -85,8 +83,15 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                             error_num = error_num + 1
                             table.append(["Not Matched", "'"])
                             # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
-                            print("ERROR: is not CHRACTER type, line:", error_line)
-                            print(inputline.rstrip('\n'))
+                            file_out.close()
+                            file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+                            printStr = "ERROR: is not CHRACTER type, line:" + str(error_line)
+
+                            filewrite(file_out, printStr)
+                            filewrite(file_out, '\n')
+                            is_error = 1
+
+
                             for index in range(error_num):
                                 error.append(" ")
                             error[error_num - 1] = "^"
@@ -100,8 +105,14 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                             error_num = error_num + 1
                             table.append(["Not Matched", '"'])
                             # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
-                            print('ERROR: is not LITERAL type line:', error_line)
-                            print(inputline.rstrip('\n'))
+                            file_out.close()
+                            file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+                            printStr = "ERROR: is not LITERAL type line:" + str(error_line)
+
+                            filewrite(file_out, printStr)
+                            filewrite(file_out, '\n')
+                            is_error = 1
+
                             for index in range(error_num):
                                 error.append(" ")
                             error[error_num - 1] = "^"
@@ -252,21 +263,29 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
             subStr += text1.popleft()
             error_num = error_num + 1
             table.append(["Not Match", subStr])  # 없는 글자 처리해줌.
-            printStr = "ERROR: There is a letter" + subStr + "is not acceptable. line:" + str(error_line)
-            print(printStr)
-            print(inputline.rstrip('\n'))
+
+            file_out.close()
+            file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+            printStr = "ERROR: There is a letter " + '"' + subStr + '"' + " is not acceptable. line:" + str(error_line)
+
             filewrite(file_out, printStr)
-            filewrite(file_out, "\n")
+            filewrite(file_out, '\n')
+            is_error = 1
+
             for index in range(error_num):
                 error.append(" ")
             error[error_num - 1] = "^"
             print(''.join(error))
             textState = 0
 
-    for i in range(len(table)):
-        print("table:", table[i])
-        filewrite(file_out, str(table[i]))
-        filewrite(file_out, "\n")
 
+    if is_error == 0 :
+        for i in range(len(table)):
+            print("table:", table[i])
+            filewrite(file_out, str(table[i]))
+            filewrite(file_out, "\n")
 
 f.close()
+
+
+

@@ -175,19 +175,6 @@ Whitespace = FiniteAutomata(
     }
 )
 
-# Boolean = FiniteAutomata(
-#     "BOOLEAN",  # matched token name
-#     ["T0", "T1", "T2"],  # state
-#     ["true", "false"],  # input stream
-#     ["T1", "T2"],  # accepted state
-#     {  # nfa to dfa transition table
-#         "T0": ["T1", "T2"],
-#         "T1": ["", ""],
-#         "T2": ["", ""]
-#     }
-# )
-
-# "'"
 
 Character = FiniteAutomata(
     "CHARACTER",  # matched token name
@@ -217,21 +204,6 @@ Operator = FiniteAutomata(
         "T4": ["", "", "", ""]
     }
 )
-
-##########finite안에 finite
-# Type = FiniteAutomata(
-#     "TYPE",  # matched token name
-#     ["T0", "T1", "T2", "T3", "T4"],  # state
-#     ["int", "char", "boolean", "String"],  # input stream
-#     ["T1", "T2", "T3", "T4"],  # accepted state
-#     {  # nfa to dfa transition table
-#         "T0": ["T1", "T2", "T3", "T4"],
-#         "T1": ["", "", "", ""],
-#         "T2": ["", "", "", ""],
-#         "T3": ["", "", "", ""],
-#         "T4": ["", "", "", ""]
-#     }
-# )
 
 Identifier = FiniteAutomata(
     "IDENTIFIER",  # matched token name

@@ -1,4 +1,4 @@
 class Name = {
-
+    int j_udy = 3;
 }
-int judy = 3.8;
+
