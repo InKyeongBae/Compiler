@@ -1,1 +1,10 @@
-ERROR: There is a letter "&" is not acceptable. line:2
+['KEYWORD', 'class']
+['IDENTIFIER', 'Name']
+['ASSIGN', '=']
+['LBRACE', '{']
+['TYPE', 'int']
+['IDENTIFIER', 'j_udy']
+['ASSIGN', '=']
+['INTEGER', '3']
+['SEMICOLON', ';']
+['RBRACE', '}']
