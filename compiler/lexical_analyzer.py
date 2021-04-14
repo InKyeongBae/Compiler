@@ -26,11 +26,11 @@ is_error = 0
 
 # 일단 input 내용 그대로 out으로 나오도록
 for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
-    print("###############"
-          "########################")
+    #print("###############"
+     #     "########################")
     table = []
     inputline = inputStr
-    print("input :", inputline)
+    #print(inputline)
     text1 = deque(inputline)
     textState = 0
 
@@ -95,7 +95,8 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                             for index in range(error_num):
                                 error.append(" ")
                             error[error_num - 1] = "^"
-                            print(''.join(error))
+                            filewrite(file_out, inputline.rstrip('\n') + '\n')
+                            filewrite(file_out, ''.join(error) + '\n')
 
                             i = 0
                             textState = 0
@@ -116,7 +117,8 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                             for index in range(error_num):
                                 error.append(" ")
                             error[error_num - 1] = "^"
-                            print(''.join(error))
+                            filewrite(file_out, inputline.rstrip('\n') + '\n')
+                            filewrite(file_out, ''.join(error) + '\n')
                             i = 0
                             textState = 0
                             break
@@ -162,6 +164,7 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                         subStr = ""
                         for _ in range(textState):
                             subStr += text1.popleft()
+                            error_num = error_num + 1
                         if i >= 0 and i < 2:
                             table.append(['BOOLEAN', subStr])
                         elif i >= 2 and i < 7:
@@ -240,7 +243,6 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                     MERGED5[i].nextState(text1[textState])
                     if MERGED5[i].isIng == 1:
                         textState += 1
-                        error_num = error_num + 1
                     else:
                         break
 
@@ -275,13 +277,14 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
             for index in range(error_num):
                 error.append(" ")
             error[error_num - 1] = "^"
-            print(''.join(error))
+            filewrite(file_out, inputline.rstrip('\n')+'\n')
+            filewrite(file_out,  ''.join(error) + '\n')
             textState = 0
 
 
     if is_error == 0 :
         for i in range(len(table)):
-            print("table:", table[i])
+            #print("table:", table[i])
             filewrite(file_out, str(table[i]))
             filewrite(file_out, "\n")
 
