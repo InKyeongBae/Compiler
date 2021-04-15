@@ -42,7 +42,7 @@ for inputStr in inputline:
             error = []
             if text1[textState] in symbols :
                 for i in range(len(MERGED1)):
-                    if i == 0:
+                    if i == 0 or i == 1:
                         while textState < len(text1) and MERGED1[i].wscheckIng(text1[textState]) == 1:
                             MERGED1[i].nextState(text1[textState])
                             if MERGED1[i].isIng == 1:
@@ -210,10 +210,8 @@ for inputStr in inputline:
 
             elif text1[textState] in OPERATOR or text1[0] in DIGIT:
                 idx = 0
-                if table and table[-1][0] == "IDENTIFIER" and text1[textState] == "-":  # MINUS PROBLEM
+                if table and (table[-1][0] == "IDENTIFIER" or table[-1][0] == "INTEGER" ) and text1[textState] == "-":  # MINUS PROBLEM
                     idx = 1
-                if table and table[-1][0] == "OPERATOR" and text1[textState] == "-":  # MINUS PROBLEM
-                    idx = 0
 
                 for i in range(idx, len(MERGED3)):
                     while textState < len(text1) and MERGED3[i].checkIng(text1[textState]) == 1:
