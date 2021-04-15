@@ -122,7 +122,30 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                             i = 0
                             textState = 0
                             break
+                            
+                        elif text1[0] == "!" and MERGED1[i].wscheckIng(text1[textState]) == 1:
+                            print("////////////////////////////////////////////////", len(text1))
+                            text1.popleft()
+                            error_num = error_num + 1
+                            table.append(["Not Matched", "!"])
+                            # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
+                            file_out.close()
+                            file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+                            printStr = "ERROR: is not CHRACTER type, line:" + str(error_line)
 
+                            filewrite(file_out, printStr)
+                            filewrite(file_out, '\n')
+                            is_error = 1
+
+                            for index in range(error_num):
+                                error.append(" ")
+                            error[error_num - 1] = "^"
+                            filewrite(file_out, inputline.rstrip('\n') + '\n')
+                            filewrite(file_out, ''.join(error) + '\n')
+
+                            i = 0
+                            textState = 0
+                            break
                     i += 1
                     textState = 0
 
