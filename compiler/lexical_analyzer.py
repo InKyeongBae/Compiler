@@ -28,14 +28,21 @@ is_error = 0
 for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
     #print("###############"
      #     "########################")
+    # error report
+    error_line = 0
+    is_error = 0
     table = []
-    inputline = inputStr
-    #print(inputline)
+    inputline =
+    text1 = deque(inputline)
+    textState = 0
+    table = []
+    inputline =
     text1 = deque(inputline)
     textState = 0
 
     # error report
-    error_line = error_line + 1
+    error_line = error_line + 1inputStr
+    #print(inputline)
     error_num = 0
 
     symbols = ["'", '"', ',', '{', '}', '(', ')', '!', ">", "<", '=', ';', '[', ']']
@@ -50,15 +57,12 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                             textState += 1
                         else:
                             break
-                        ##
-
                 else:
                     while textState < len(text1) and MERGED1[i].checkIng(text1[textState]) == 1:
                         MERGED1[i].nextState(text1[textState])
                         if MERGED1[i].isIng == 1:
                             textState += 1
-                            if MERGED1[i].tokenName == "CHARACTER" and textState < len(text1) and text1[textState] == \
-                                    BLANK[0]:
+                            if MERGED1[i].tokenName == "CHARACTER" and textState < len(text1) and text1[textState] == BLANK[0]:
                                 MERGED1[i].nextState(text1[textState])
                                 textState += 1
                         else:
@@ -76,76 +80,72 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                     textState = 0
                     MERGED1[i].clear()
                 else:
+                    # if text1:
+                    #     if MERGED1[i].tokenName == "CHARACTER" and text1[0] == "'":
+                    #         text1.popleft()
+                    #         error_num = error_num + 1
+                    #         table.append(["Not Matched", "'"])
+                    #         # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
+                    #         file_out.close()
+                    #         file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+                    #         printStr = "ERROR: is not CHRACTER type, line:" + str(error_line)
+                    #
+                    #         filewrite(file_out, printStr)
+                    #         filewrite(file_out, '\n')
+                    #         is_error = 1
+                    #
+                    #
+                    #         for index in range(error_num):
+                    #             error.append(" ")
+                    #         error[error_num - 1] = "^"
+                    #         filewrite(file_out, inputline.rstrip('\n') + '\n')
+                    #         filewrite(file_out, ''.join(error) + '\n')
+                    #
+                    #         i = 0
+                    #         textState = 0
+                    #         break
+                    #     elif MERGED1[i].tokenName == "LITERAL" and text1[0] == '"':
+                    #         text1.popleft()
+                    #         error_num = error_num + 1
+                    #         table.append(["Not Matched", '"'])
+                    #         # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
+                    #         file_out.close()
+                    #         file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+                    #         printStr = "ERROR: is not LITERAL type line:" + str(error_line)
+                    #
+                    #         filewrite(file_out, printStr)
+                    #         filewrite(file_out, '\n')
+                    #         is_error = 1
+                    #
+                    #         for index in range(error_num):
+                    #             error.append(" ")
+                    #         error[error_num - 1] = "^"
+                    #         filewrite(file_out, inputline.rstrip('\n') + '\n')
+                    #         filewrite(file_out, ''.join(error) + '\n')
+                    #         i = 0
+                    #         textState = 0
+                    #         break
+                    subStr = ""
+                    subStr += text1.popleft()
+                    error_num = error_num + 1
+                    table.append(["Not Match", subStr])  # 없는 글자 처리해줌.
+
+                    file_out.close()
+                    file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+                    printStr = "ERROR: There is a letter " + '"' + subStr + '"' + " is not acceptable. line:" + str(
+                        error_line)
+
+                    filewrite(file_out, printStr)
+                    filewrite(file_out, '\n')
+                    is_error = 1
+
+                    for index in range(error_num):
+                        error.append(" ")
+                    error[error_num - 1] = "^"
+                    filewrite(file_out, inputline.rstrip('\n') + '\n')
+                    filewrite(file_out, ''.join(error) + '\n')
+
                     MERGED1[i].clear()
-                    if text1:
-                        if MERGED1[i].tokenName == "CHARACTER" and text1[0] == "'":
-                            text1.popleft()
-                            error_num = error_num + 1
-                            table.append(["Not Matched", "'"])
-                            # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
-                            file_out.close()
-                            file_out = open(f"{filename.replace('.java', '')}.out", 'w')
-                            printStr = "ERROR: is not CHRACTER type, line:" + str(error_line)
-
-                            filewrite(file_out, printStr)
-                            filewrite(file_out, '\n')
-                            is_error = 1
-
-
-                            for index in range(error_num):
-                                error.append(" ")
-                            error[error_num - 1] = "^"
-                            filewrite(file_out, inputline.rstrip('\n') + '\n')
-                            filewrite(file_out, ''.join(error) + '\n')
-
-                            i = 0
-                            textState = 0
-                            break
-                        elif MERGED1[i].tokenName == "LITERAL" and text1[0] == '"':
-                            text1.popleft()
-                            error_num = error_num + 1
-                            table.append(["Not Matched", '"'])
-                            # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
-                            file_out.close()
-                            file_out = open(f"{filename.replace('.java', '')}.out", 'w')
-                            printStr = "ERROR: is not LITERAL type line:" + str(error_line)
-
-                            filewrite(file_out, printStr)
-                            filewrite(file_out, '\n')
-                            is_error = 1
-
-                            for index in range(error_num):
-                                error.append(" ")
-                            error[error_num - 1] = "^"
-                            filewrite(file_out, inputline.rstrip('\n') + '\n')
-                            filewrite(file_out, ''.join(error) + '\n')
-                            i = 0
-                            textState = 0
-                            break
-                            
-                        elif text1[0] == "!" and MERGED1[i].wscheckIng(text1[textState]) == 1:
-                            print("////////////////////////////////////////////////", len(text1))
-                            text1.popleft()
-                            error_num = error_num + 1
-                            table.append(["Not Matched", "!"])
-                            # 만약 허용되는 글자인데 없으면, 혹은 ", ' 따옴표들이면 짝 쓰시오 오류 메시
-                            file_out.close()
-                            file_out = open(f"{filename.replace('.java', '')}.out", 'w')
-                            printStr = "ERROR: is not CHRACTER type, line:" + str(error_line)
-
-                            filewrite(file_out, printStr)
-                            filewrite(file_out, '\n')
-                            is_error = 1
-
-                            for index in range(error_num):
-                                error.append(" ")
-                            error[error_num - 1] = "^"
-                            filewrite(file_out, inputline.rstrip('\n') + '\n')
-                            filewrite(file_out, ''.join(error) + '\n')
-
-                            i = 0
-                            textState = 0
-                            break
                     i += 1
                     textState = 0
 
@@ -311,7 +311,64 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
             filewrite(file_out, str(table[i]))
             filewrite(file_out, "\n")
 
-f.close()
 
 
+class error_report:
+
+
+    def __init__(self, filename):  # startState
+        self.subStr = ""
+        self.error_num = 0
+        self.error_line = 0
+        self.is_error = 0
+        self.f = open(filename, 'r') #filename = sys.argv[1]
+        self.file_out
+
+    def fileopen(self, file, string):
+        self.file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+
+
+    def filewrite(self, file, string):
+        file.write(string)
+
+    def fileclose(self, file):
+        f.close()
+
+    def count_line(self):
+        self.error_line = self.error_line + 1
+
+    def count_error(self):
+        self.error_num = self.error_num + 1
+
+    def write_file(self):
+        file_out.close()
+        file_out = open(f"{filename.replace('.java', '')}.out", 'w')
+        printStr = "ERROR: There is a letter " + '"' + subStr + '"' + " is not acceptable. line:" + str(error_line)
+
+        filewrite(file_out, printStr)
+        filewrite(file_out, '\n')
+
+        self.is_error = 1
+
+        for index in range(error_num):
+            error.append(" ")
+
+        error[error_num - 1] = "^"
+        filewrite(file_out, inputline.rstrip('\n') + '\n')
+        filewrite(file_out, ''.join(error) + '\n')
+
+        for index in range(error_num):
+            error.append(" ")
+
+    def check_error(self):
+        return self.is_error
+
+
+
+
+    if is_error == 0 :
+        for i in range(len(table)):
+            #print("table:", table[i])
+            filewrite(file_out, str(table[i]))
+            filewrite(file_out, "\n")
 
