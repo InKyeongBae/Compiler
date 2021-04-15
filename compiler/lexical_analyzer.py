@@ -44,7 +44,8 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
     else :
         while len(text1) > 0:
             error = []
-            if text1[textState] in symbols:
+            if text1[textState] in symbols and text1[textState] not in WHITESPACE:
+
                 for i in range(len(MERGED1)):
                     if i == 0:
                         while textState < len(text1) and MERGED1[i].wscheckIng(text1[textState]) == 1:
@@ -66,17 +67,19 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
                     if MERGED1[i].isAccepted():
                         subStr = ""
                         text1copy = text1
+
                         for _ in range(textState):
-                            # print(text1[_])
                             subStr += text1.popleft()
                             error_num = error_num + 1
 
                         table.append([MERGED1[i].acceptedToken(), subStr])
                         textState = 0
                         MERGED1[i].clear()
+                        break
 
-                    elif MERGED1[i].isAccepted() == False and i == (len(MERGED1) - 1) :
+                    elif MERGED1[i].isAccepted() == False and i == (len(MERGED1) - 1):
                         MERGED1[i].clear()
+                        print(text1,"!!!!!!!!!!!!!!")
                         while(len(text1) > 0) :
                             text1.pop()
                         print("EMPTY", text1)
@@ -215,6 +218,7 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
 
 
             elif text1[textState] in WHITESPACE:
+                print("~^~^~^", text1)
                 for i in range(len(MERGED4)):
                     while textState < len(text1) and MERGED4[i].wscheckIng(text1[textState]) == 1:
                         MERGED4[i].nextState(text1[textState])
@@ -261,7 +265,7 @@ for inputStr in inputline:  ##아래 있는 inputline이랑 왜 다르지?
 
         if is_error == 0 :
             for i in range(len(table)):
-                #print("table:", table[i])
+                print("table:", table[i])
                 filewrite(file_out, str(table[i]))
                 filewrite(file_out, "\n")
 
