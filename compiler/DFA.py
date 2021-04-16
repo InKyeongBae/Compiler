@@ -1,4 +1,4 @@
-
+# Input Definition
 TYPE = ['int', 'char', 'boolean', 'String']
 BOOLEAN = ['true', 'false']
 OPERATOR = ['-', '+', '*', '/']
@@ -22,18 +22,16 @@ DIGIT = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 POS_DIGIT = DIGIT[1:]
 
 
-# DFA (in the form of transition table)
-class FiniteAutomata:  # Finite Automata for NFA, DFA
+class FiniteAutomata:  # Finite Automata for DFA
     tokenName = ""
-    F = {}
-    Sigma = []
-    # q0 = []
-    state = 0
-    Q = []
-    Delta = {}
-    isIng = 1
+    F = {}      # a set of final(or accepting) states
+    Sigma = []  # a finite set of input symbols
+    state = 0  # a start state q0
+    Q = []  # a finite set of states
+    Delta = {}  # a set of state transition functions
+    isIng = 1  # a flag that saves FA is working
 
-    def __init__(self, token, states, alphabet, final, table):  # startState
+    def __init__(self, token, states, alphabet, final, table):
         self.tokenName = token
         self.Q = states
         self.Sigma = alphabet
@@ -41,20 +39,20 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         self.F = final
         self.Delta = self.transition(table)
 
-    def isAccepted(self):
+    def isAccepted(self):  # return true when current lexeme is matched with this token
         if self.state in self.F:
             return True
         else:
             return False
 
-    def checkIng(self, input):
-        isAlpha = 0
+    def checkIng(self, input):  # check the input is in the token's alphabet
+        isAlpha = 0  # flag: is in alphabet
         for i in self.Sigma:
-            if input not in i:
+            if input not in i:  # not an element
                 isAlpha = 0
-            elif input == ' ':
+            elif input == ' ':  # to distinguish input with WHITESPACE lexeme
                 isAlpha = 0
-            else:
+            else:               # included in alphabet
                 isAlpha = 1
                 break
 
@@ -71,13 +69,13 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         else:
             return self.isIng
 
-    def wscheckIng(self, input):
+    def wscheckIng(self, input):  # to check the blank is WHITESPACE lexemes
         isAlpha = 0
         for i in self.Sigma:
             if input not in i:
                 isAlpha = 0
             else:
-                isAlpha = 1
+                isAlpha = 1  # if the token is WHITESPACE
                 break
         if isAlpha == 0:
             # print(f'{input}: undefined alphabet')
@@ -92,7 +90,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         else:
             return self.isIng
 
-    def nextState(self, input):  # transition table에서 입력하나 보고 간 state,
+    def nextState(self, input):  # look transition table and move to nest state
         items = self.Delta[self.state].items()
         posNext = dict()
         for key, value in items:
@@ -103,7 +101,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         inputStr = ""
 
         for i in keys:
-            if len(i) > 1:  # ast.literal_eval(x), json
+            if len(i) > 1:
                 i = i.strip('][').replace("'", "").split(', ')
             if input in i:
                 newKey = str(i)
@@ -116,24 +114,24 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         self.state = nextState
         return self.isIng
 
-    def moveState(self, next_state):  # state update하기
+    def moveState(self, next_state):  # update state
         self.state = next_state
 
-    def currentState(self, next_state):  # state update하기
+    def currentState(self, next_state):  # get currentState
         return self.state
 
-    def acceptedToken(self):  # if accepted or not
+    def acceptedToken(self):  # get token name
         if self.state in self.F:
             return self.tokenName
         else:
             return "Not Accepted"
 
-    def clear(self):  # 재사용을 위한 reset
+    def clear(self):  # clear to reuse the automata
         self.state = "T0"
         self.isIng = 1
         return
 
-    def transition(self, table):
+    def transition(self, table):  # transition table
         delta = {}
         for T in self.Q:
             delta[T] = {}
@@ -145,7 +143,7 @@ class FiniteAutomata:  # Finite Automata for NFA, DFA
         return delta
 
 
-
+# Finite Automata Definitions with transition table
 Integer = FiniteAutomata(
     "INTEGER",  # matched token name
     ["T0", "T1", "T2", "T3", "T4"],  # state
