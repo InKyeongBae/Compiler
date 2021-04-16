@@ -210,7 +210,7 @@ for inputStr in inputline:
 
             elif text1[textState] in OPERATOR or text1[0] in DIGIT:
                 idx = 0
-                if table and (table[-1][0] == "IDENTIFIER" or table[-1][0] == "INTEGER" ) and text1[textState] == "-":  # MINUS PROBLEM
+                if table and (table[-1][0] == "IDENTIFIER" or table[-1][0] == "INTEGER" or table[-1][0] == "CHARACTER" ) and text1[textState] == "-":  # MINUS PROBLEM
                     idx = 1
 
                 for i in range(idx, len(MERGED3)):

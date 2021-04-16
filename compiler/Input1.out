@@ -1,3 +1,11 @@
-ERROR: is not match type, line:2
-    ' a'
-    ^
+['KEYWORD', 'class']
+['IDENTIFIER', 'Name']
+['ASSIGN', '=']
+['LBRACE', '{']
+['CHARACTER', "'a'"]
+['OPERATOR', '-']
+['INTEGER', '5']
+['CHARACTER', "' '"]
+['OPERATOR', '-']
+['INTEGER', '3']
+['RBRACE', '}']
