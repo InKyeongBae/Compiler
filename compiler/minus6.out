@@ -1,0 +1,4 @@
+['IDENTIFIER', 'number']
+['OPERATOR', '-']
+['OPERATOR', '-']
+['IDENTIFIER', 'float']

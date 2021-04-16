@@ -1,0 +1,6 @@
+['IDENTIFIER', 'a']
+['ASSIGN', '=']
+['INTEGER', '1']
+['IDENTIFIER', 'a']
+['OPERATOR', '-']
+['INTEGER', '11']
