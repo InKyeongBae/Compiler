@@ -1,4 +1,6 @@
-_SLR_TABLE = [
+END_MARK ='$'
+
+SLR_TABLE = [
     {
         'vtype': 's5', 'class': 's6', '$': 'r4',
         'CODE': 1, 'VDECL': 2, 'FDECL': 3, 'CDECL': 4
