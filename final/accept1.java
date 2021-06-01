@@ -1,5 +1,5 @@
-String main(int a) {
+int main() {
     int num1 = 0;
 
-    return 0;
+    return true;
 }

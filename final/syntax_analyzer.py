@@ -92,78 +92,84 @@ terminal_list.append(END_MARK)
 print(terminal_list)
 
 now_stack = [0]
-spliter_pos = 0
+position = 0
 
 k = 0
-while (True and err == 0):
-    k += 1
-    print("!!!", k)
-    # current state
-    current_state = now_stack[-1]
 
-    # next input symbol is deicded by position of spliter
-    next_symbol = terminal_list[spliter_pos]
-    # next input symbol shoud be in SLR_TABLE
-    # if not, error
-    if next_symbol not in SLR_TABLE[current_state].keys():
-        file_out.close()
-        file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-        print(next_symbol)
-        print(spliter_pos)
-        print(SLR_TABLE[current_state].keys())
-        print("REJECT 1")
-        printStr = "REJECT"
-        filewrite(file_out, printStr)
-        filewrite(file_out, '\n')
-        break
+while (err == 0):
+        k += 1
+        print("!!!", k)
 
-
-    # shift
-    if (SLR_TABLE[current_state][next_symbol][0] == 's'):
-        # move position of spliter
-        spliter_pos = spliter_pos + 1
-        # push stack to next state
-        now_stack.append(int(SLR_TABLE[current_state][next_symbol][1]))
-
-    # reduce
-    elif (SLR_TABLE[current_state][next_symbol][0] == 'r'):
-        buf_string = SLR_TABLE[current_state][next_symbol][1]
-        # get rule , type is list
-        buf_rule = RULES[buf_string].split()
-        buf_length = len(buf_rule) - 2  # ex) 'STMT → VDECL' , we only need VDECL
-        # revise terminal list
-        for i in range(buf_length):
-            if (buf_rule[2] != 'epsilon'):  # if not epsilon
-                # pop out from stack
-                now_stack.pop()
-                terminal_list.pop(spliter_pos - i - 1)
-        if (buf_rule[2] != 'epsilon'):  # if not epsilon
-            spliter_pos = spliter_pos - buf_length + 1
-        else:  # if epsilon
-            spliter_pos = spliter_pos + 1
-        # revise terminal list
-        terminal_list.insert(spliter_pos - 1, buf_rule[0])
+        # current state
         current_state = now_stack[-1]
-        # Print for debugging
-        # print(self.terminal_list)
-        if ((buf_rule[0] == 's') and (len(terminal_list) == 2) and (spliter_pos == 1)):
+
+        # next input symbol
+        next_symbol = terminal_list[position]
+        # next symbol이 SLR_TABLE에 있는 지 체크
+        if next_symbol not in SLR_TABLE[current_state].keys():
             file_out.close()
             file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-            printStr = "ACCEPT"
-            print("ACCEPT")
-            filewrite(file_out, printStr)
-            filewrite(file_out, '\n')
-            break
-        if buf_rule[0] not in SLR_TABLE[current_state].keys():
-            file_out.close()
-            file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-            print(buf_rule[0])
-            print(SLR_TABLE[current_state].keys())
-            print("REJECT 2")
+            print(next_symbol)
+            print(position)
+            print(SLR_TABLE[current_state])
+            print("REJECT 1")
+            err = 1
             printStr = "REJECT"
+            ## Error line 처리
             filewrite(file_out, printStr)
             filewrite(file_out, '\n')
             break
-        now_stack.append(SLR_TABLE[current_state][buf_rule[0]])
 
 
+        # shift
+        if (SLR_TABLE[current_state][next_symbol][0] == 's'):
+            position = position + 1
+            now_stack.append(int(SLR_TABLE[current_state][next_symbol][1:]))
+
+        # reduce
+        elif (SLR_TABLE[current_state][next_symbol][0] == 'r'):
+            string_check = SLR_TABLE[current_state][next_symbol][1:]
+
+            rule_check = RULES[string_check].split()
+            rule_check_len = len(rule_check) - 2
+
+            # terminal list 확인
+            for i in range(rule_check_len):
+                if (rule_check[2] != 'epsilon'):  # if not epsilon
+                    # pop out from stack
+                    now_stack.pop()
+                    terminal_list.pop(position - i - 1)
+            print("terminal", terminal_list)
+            if (rule_check[2] != 'epsilon'):  # if not epsilon
+                position = position - rule_check_len + 1
+            else:
+                # epsilon일 때
+                position = position + 1
+            # terminal list 확인
+            terminal_list.insert(position - 1, rule_check[0])
+            current_state = now_stack[-1]
+            # print(terminal_list)
+
+            if ((rule_check[0] == 'START') and (len(terminal_list) == 2) and (position == 1)):
+                file_out.close()
+                file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
+                printStr = "ACCEPT"
+                print("ACCEPT 2")
+                err = 1
+                filewrite(file_out, printStr)
+                filewrite(file_out, '\n')
+                break
+            if rule_check[0] not in SLR_TABLE[current_state].keys():
+                file_out.close()
+                file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
+                print(rule_check[0])
+                print(SLR_TABLE[current_state].keys())
+                print("REJECT 2")
+                ## Error line 처리
+                err = 1
+                printStr = "REJECT"
+                filewrite(file_out, printStr)
+                filewrite(file_out, '\n')
+                break
+
+            now_stack.append(SLR_TABLE[current_state][rule_check[0]])

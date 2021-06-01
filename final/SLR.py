@@ -6,7 +6,7 @@ SLR_TABLE = [
         'CODE': 1, 'VDECL': 2, 'FDECL': 3, 'CDECL': 4
     },
     {
-        '$': 'acc'
+        '$': 'r0'
     },
     {
         'vtype': 's5', 'class': 's6', '$': 'r4',
