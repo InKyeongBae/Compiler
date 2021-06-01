@@ -226,9 +226,6 @@ _SLR_TABLE = [
         'rparen': 'r31', 'comp': 's74'
     },
     {
-        'semi':	's13', 'assign': 's15'
-    },
-    {
         'boolstr': 's69', 'lparen': 's68',
         'COND': 75, 'T': 67
     },
