@@ -3,16 +3,6 @@ from SLR import *
 from rules import *
 
 
-# l = "['IDENTIFIER', 'numOfelements']"
-# list_str = l.split("'")
-# nowList = []
-# nowList.append(list_str[1])
-# nowList.append(list_str[3])
-# print(nowList)
-# print(len(nowList))
-# print(type(nowList))
-
-
 # file I/O
 f = open(sys.argv[1], 'r')
 inputline = f.readlines()
@@ -23,9 +13,6 @@ file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
 def filewrite(file, string):
     file.write(string)
 
-# error report
-# error_line = 0
-# is_error = 0
 
 terminal_list = []
 err = 0
@@ -105,6 +92,7 @@ while (err == 0):
 
         # next input symbol
         next_symbol = terminal_list[position]
+        print(next_symbol, "|", current_state)
         # next symbol이 SLR_TABLE에 있는 지 체크
         if next_symbol not in SLR_TABLE[current_state].keys():
             file_out.close()
@@ -150,15 +138,6 @@ while (err == 0):
             current_state = now_stack[-1]
             # print(terminal_list)
 
-            if ((rule_check[0] == 'START') and (len(terminal_list) == 2) and (position == 1)):
-                file_out.close()
-                file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-                printStr = "ACCEPT"
-                print("ACCEPT 2")
-                err = 1
-                filewrite(file_out, printStr)
-                filewrite(file_out, '\n')
-                break
             if rule_check[0] not in SLR_TABLE[current_state].keys():
                 file_out.close()
                 file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
@@ -173,3 +152,13 @@ while (err == 0):
                 break
 
             now_stack.append(SLR_TABLE[current_state][rule_check[0]])
+
+        elif (SLR_TABLE[current_state][next_symbol] == 'acc'):
+            file_out.close()
+            file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
+            printStr = "ACCEPT"
+            print("ACCEPT 1")
+            err = 1
+            filewrite(file_out, printStr)
+            filewrite(file_out, '\n')
+            break
