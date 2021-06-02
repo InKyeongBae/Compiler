@@ -21,6 +21,9 @@ for inputStr in inputline:
         filewrite(file_out, "ERROR 0: input file(Lexical Analysis Result) error")
         err = 1
         break
+    # print("inputStr", inputStr, end='')
+    # print("terminal_list", terminal_list)
+    # print("")
     if inputStr[0] == "[" :
         list_str = inputStr.split("'")
         if list_str[1] == "IDENTIFIER" :
@@ -50,7 +53,7 @@ for inputStr in inputline:
         elif list_str[1] == "OPERATOR" :
             if list_str[3] == "+" or list_str[3] == "-" :
                 terminal_list.append("addsub")
-            elif list_str[3] == "*" or list_str == "/" :
+            elif list_str[3] == "*" or list_str[3] == "/" :
                 terminal_list.append("multdiv")
         elif list_str[1] == "TYPE" :
             terminal_list.append("vtype")
@@ -76,7 +79,7 @@ for inputStr in inputline:
             break
 
 terminal_list.append(END_MARK)
-#print(terminal_list)
+# print(terminal_list)
 
 now_stack = [0]
 position = 0
@@ -85,13 +88,13 @@ k = 0
 
 while (err == 0):
     k += 1
-    #print("!!!", k)
+    # print("!!!", k)
 
     # current state
     current_state = now_stack[-1]
     # next input symbol
     next_symbol = terminal_list[position]
-    #print(next_symbol, "|", current_state)
+    # print(next_symbol, "|", current_state)
     # next symbol이 SLR_TABLE에 있는 지 체크
     if next_symbol not in SLR_TABLE[current_state].keys():
         file_out.close()
@@ -131,13 +134,13 @@ while (err == 0):
 
         rule_check = RULES[string_check].split()
         rule_check_len = len(rule_check) - 2
+        # print(rule_check)
         # terminal list 확인
         for i in range(rule_check_len):
             if (rule_check[2] != 'epsilon'):  # if not epsilon
                 # pop out from stack
                 now_stack.pop()
                 terminal_list.pop(position - i - 1)
-        #print("terminal", terminal_list)
         if (rule_check[2] != 'epsilon'):  # if not epsilon
             position = position - rule_check_len + 1
         else:
@@ -146,7 +149,7 @@ while (err == 0):
         # terminal list 확인
         terminal_list.insert(position - 1, rule_check[0])
         current_state = now_stack[-1]
-        # print(terminal_list)
+
 
         # ------------------------------------------------------------#
         if rule_check[0] not in SLR_TABLE[current_state].keys():
@@ -157,12 +160,11 @@ while (err == 0):
             err = 1
             printStr = "ERROR 3: GOTO table in SLR table is wrong, please check the CFG G or table"
 
-            # SLR table 중 goto table만 뽑음
-            GOTOtable = [{key: value} for key, value in SLR_TABLE[current_state].items() if type(value) is int]
-            message1 = "State {} has GOTO table : {}".format(current_state, GOTOtable)
+            SLRtable = SLR_TABLE[current_state]
+            message1 = "State {} has SLR table : {}".format(current_state, SLRtable)
             message2 = "State {} attempted to reduce by CFG G: {}".format(current_state, rule_check)
 
-            print(printStr) # 터미널 창에 출력
+            print(printStr)  # 터미널 창에 출력
             print(message1)
             print(message2)
 
@@ -186,3 +188,5 @@ while (err == 0):
         filewrite(file_out, printStr)
         filewrite(file_out, '\n')
         break
+    # print(terminal_list)
+    # print(" ")
