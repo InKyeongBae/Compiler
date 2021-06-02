@@ -1,3 +1,3 @@
-[REJECT] Error 2 : Token number (9) ['IDENTIFIER', 'a']
-SyntaxError: Missing a terminal corresponding to one of the following: (token line 9)
+[REJECT] Error 2 : Token number (8) ['SEMICOLON', ';']
+SyntaxError: Missing a terminal corresponding to one of the following: (token line 8)
              ['vtype', 'class']
