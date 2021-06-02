@@ -139,7 +139,7 @@ while (err == 0):
 
         rule_check = RULES[string_check].split()
         rule_check_len = len(rule_check) - 2
-        # print(rule_check)
+        print(rule_check)
         # terminal list 확인
         for i in range(rule_check_len):
             if (rule_check[2] != 'epsilon'):  # if not epsilon

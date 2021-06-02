@@ -1,3 +1,1 @@
-ERROR 3: GOTO table in SLR table is wrong, please check the CFG G or table
-State 57 has GOTO table : [{'RHS': 65}, {'EXPR': 21}, {'TERM': 25}, {'FACTOR': 26}]
-State 57 attempted to reduce by CFG G: ['ASSIGN', '->', 'id', 'assign', 'RHS']
+ACCEPT

@@ -38,4 +38,4 @@ RULES = {'0': 'START -> CODE',
          '37' : 'CDECL -> class id lbrace ODECL rbrace',
          '38' : 'ODECL -> VDECL ODECL',
          '39' : 'ODECL -> FDECL ODECL',
-         '40' : 'epsilone'}
+         '40' : 'ODECL -> epsilon'}
