@@ -1,3 +1,1 @@
-ERROR 2: Token number (12) ['LPAREN', '(']
-SyntaxError: Lexeme ( must be followed by a terminal corresponding to one of the following:
-             ['rparen', 'comp']
+ACCEPT

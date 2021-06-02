@@ -102,10 +102,11 @@ while (err == 0):
         printStr = "ERROR 2: Token number ({}) ".format(position) + inputline[position-1]
         message = "SyntaxError: Lexeme " + inputline[position-1].split("'")[3] + \
                   " must be followed by a terminal corresponding to one of the following:"
+        # 올바른 syntax가 되기 위해 필요한 아이템
         missing_item = [item for item in list(SLR_TABLE[current_state].keys()) if item != END_MARK]
         missing = "             {}".format(missing_item)
 
-        print(printStr, end='')
+        print(printStr, end='') # 터미널 창에 출력
         print(message)
         print(missing)
 
@@ -151,15 +152,25 @@ while (err == 0):
         if rule_check[0] not in SLR_TABLE[current_state].keys():
             file_out.close()
             file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-            print(rule_check)
-            print(current_state)
-            print(SLR_TABLE[current_state].keys())
-            print("REJECT 2")
-            print(inputline[position-1])
+        
             # ---Error message--- #
             err = 1
-            printStr = "ERROR 3: "
+            printStr = "ERROR 3: GOTO table in SLR table is wrong, please check the CFG G or table"
+
+            # SLR table 중 goto table만 뽑음
+            GOTOtable = [{key: value} for key, value in SLR_TABLE[current_state].items() if type(value) is int]
+            message1 = "State {} has GOTO table : {}".format(current_state, GOTOtable)
+            message2 = "State {} attempted to reduce by CFG G: {}".format(current_state, rule_check)
+
+            print(printStr) # 터미널 창에 출력
+            print(message1)
+            print(message2)
+
             filewrite(file_out, printStr)
+            filewrite(file_out, '\n')
+            filewrite(file_out, message1)
+            filewrite(file_out, '\n')
+            filewrite(file_out, message2)
             filewrite(file_out, '\n')
             # ---End of the Error message--- #
             break
