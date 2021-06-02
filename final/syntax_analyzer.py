@@ -90,6 +90,7 @@ now_stack = [0]
 position = 0
 
 k = 0
+token_index = 1 # line for error
 
 while (err == 0):
     k += 1
@@ -106,14 +107,14 @@ while (err == 0):
         print("REJECT")
         err = 1
         # ---Error message--- #
-        printStr = "ERROR 2: Token number ({}) ".format(position) + inputline[position-1]
+        printStr = "ERROR 2: Token number ({}) ".format(token_index) + inputline[token_index-1]
         message = "SyntaxError: Lexeme " + inputline[position-1].split("'")[3] + \
-                  " must be followed by a terminal corresponding to one of the following:"
+                  " must be a terminal corresponding to one of the following:"
         # 올바른 syntax가 되기 위해 필요한 아이템
         missing_item = [item for item in list(SLR_TABLE[current_state].keys()) if item != END_MARK]
         missing = "             {}".format(missing_item)
 
-        print(printStr, end='') # 터미널 창에 출력
+        print(printStr, end='')  # 터미널 창에 출력
         print(message)
         print(missing)
 
@@ -130,6 +131,7 @@ while (err == 0):
     if (SLR_TABLE[current_state][next_symbol][0] == 's'):
         position = position + 1
         now_stack.append(int(SLR_TABLE[current_state][next_symbol][1:]))
+        token_index += 1 # count the token index
 
     # reduce
     elif (SLR_TABLE[current_state][next_symbol][0] == 'r'):

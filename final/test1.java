@@ -1,5 +1,3 @@
-int main(){
-if ( 1 > true) {
-}
-return a = 0;
-}
+String a;
+String newStr = "New Test String";
+a = a + newStr;
