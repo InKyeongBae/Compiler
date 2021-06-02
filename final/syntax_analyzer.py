@@ -108,10 +108,9 @@ while (err == 0):
         err = 1
         # ---Error message--- #
         printStr = "ERROR 2: Token number ({}) ".format(token_index) + inputline[token_index-1]
-        message = "SyntaxError: Lexeme " + inputline[position-1].split("'")[3] + \
-                  " must be a terminal corresponding to one of the following:"
+        message = "SyntaxError: Missing a terminal corresponding to one of the following: (token line {})".format(token_index)
         # 올바른 syntax가 되기 위해 필요한 아이템
-        missing_item = [item for item in list(SLR_TABLE[current_state].keys()) if item != END_MARK]
+        missing_item = [item for item in list(SLR_TABLE[current_state].keys()) if item != END_MARK and item.islower()]
         missing = "             {}".format(missing_item)
 
         print(printStr, end='')  # 터미널 창에 출력
