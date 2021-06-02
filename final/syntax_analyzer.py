@@ -126,19 +126,6 @@ while (err == 0):
         # ---End of the Error message--- #
         break
 
-    # save the prev states for the ERROR MESSAGE
-    prev_symbol = next_symbol
-    prev_state = current_state
-    prev_terminal_list = terminal_list
-    prev_position = position
-
-    # print(prev_symbol, "|", prev_state)
-    # print(prev_terminal_list)
-    # print(prev_position)
-
-    print(prev_symbol, "|", prev_state)
-    print(prev_terminal_list)
-    print(prev_position)
     # shift
     if (SLR_TABLE[current_state][next_symbol][0] == 's'):
         position = position + 1
@@ -150,7 +137,6 @@ while (err == 0):
 
         rule_check = RULES[string_check].split()
         rule_check_len = len(rule_check) - 2
-        print("룰 여깄소", rule_check)
 
         # terminal list 확인
         for i in range(rule_check_len):
@@ -158,18 +144,6 @@ while (err == 0):
                 # pop out from stack
                 now_stack.pop()
                 terminal = terminal_list.pop(position - i - 1)
-                print("에러?", terminal, rule_check[-1-i])
-                if rule_check[-1-i] != terminal:
-                    print(prev_symbol, "|", prev_state)
-                    print(prev_terminal_list)
-                    print(prev_position)
-                    print(rule_check)
-                    printStr = "ERROR 4: SLR table is wrong, please check the table"
-                    print(printStr)
-                    err = 1
-                    break
-        if err == 1:
-            break
 
         if (rule_check[2] != 'epsilon'):  # if not epsilon
             position = position - rule_check_len + 1
@@ -180,40 +154,14 @@ while (err == 0):
         terminal_list.insert(position - 1, rule_check[0])
         current_state = now_stack[-1]
 
-
         # ------------------------------------------------------------#
         if rule_check[0] not in SLR_TABLE[current_state].keys():
             file_out.close()
             file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-            print("REJECT")
-            # ---Error message--- #
-            err = 1
-            printStr = "ERROR 3: CFG G is wrong, please check the CFG G"
-            # GOTO table in SLR table is wrong, please check the CFG G or table
-            #SLRtable = SLR_TABLE[current_state]
-            #message1 = "State {} has SLR table : {}".format(current_state, SLRtable)
-            message2 = "State {} attempted to reduce by CFG G: {}".format(current_state, rule_check)
+            print("REJECT 3")
 
-            # print(prev_symbol, "|", prev_state)
-            # print(prev_terminal_list)
-            # print(prev_position)
-            # print(rule_check)
-
-            # print(next_symbol, "|", current_state)
-            # print(terminal_list)
-            # print(position)
-
-            print(printStr)  # 터미널 창에 출력
-            #print(message1)
-            print(message2)
-
-
-            filewrite(file_out, printStr)
             filewrite(file_out, '\n')
-            # filewrite(file_out, message1)
-            # filewrite(file_out, '\n')
-            filewrite(file_out, message2)
-            filewrite(file_out, '\n')
+
             # ---End of the Error message--- #
             break
         # ------------------------------------------------------------#
