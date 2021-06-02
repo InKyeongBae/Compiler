@@ -94,10 +94,6 @@ token_index = 1 # line for error
 
 while (err == 0):
     k += 1
-<<<<<<< HEAD
-=======
-    # print("!!!", k)
->>>>>>> 9f0d857da65f1906fab3224a1ee4316a65464260
 
     # current state
     current_state = now_stack[-1]
@@ -129,31 +125,18 @@ while (err == 0):
         filewrite(file_out, '\n')
         # ---End of the Error message--- #
         break
-<<<<<<< HEAD
 
-=======
-    # print(next_symbol, "|", current_state)
-    # print(terminal_list)
-    # print(position)
->>>>>>> 9f0d857da65f1906fab3224a1ee4316a65464260
 
     # shift
     if (SLR_TABLE[current_state][next_symbol][0] == 's'):
         position = position + 1
         now_stack.append(int(SLR_TABLE[current_state][next_symbol][1:]))
-<<<<<<< HEAD
         token_index += 1 # count the token index
 
     # reduce
     elif (SLR_TABLE[current_state][next_symbol][0] == 'r'):
-=======
 
-    # reduce
-    elif (SLR_TABLE[current_state][next_symbol][0] == 'r'):
-
->>>>>>> 9f0d857da65f1906fab3224a1ee4316a65464260
         string_check = SLR_TABLE[current_state][next_symbol][1:]
-
         rule_check = RULES[string_check].split()
         rule_check_len = len(rule_check) - 2
 
@@ -169,8 +152,8 @@ while (err == 0):
         else:
             # epsilon일 때
             position = position + 1
+        
         # terminal list 확인
-
         terminal_list.insert(position - 1, rule_check[0])
         current_state = now_stack[-1]
 
