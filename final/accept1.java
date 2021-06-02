@@ -1,7 +1,9 @@
-int main(int num) {
+int main(String hello) {
     int num1 = 0;
-    while(true>false){
+    char char1 = 'a';
+    boolean bool1 = true;
+    while(true == false){
         String h = "Hello";
     }
-    return num;
+    return h + hello;
 }
