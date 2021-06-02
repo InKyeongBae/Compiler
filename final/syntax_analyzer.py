@@ -18,7 +18,7 @@ terminal_list = []
 err = 0
 for inputStr in inputline:
     if inputStr[0] == "E" :
-        filewrite(file_out, "ERROR 0: input file(Lexical Analysis Result) error")
+        filewrite(file_out, "[REJECT] Error 0 : input file(Lexical Analysis Result) error")
         err = 1
         break
     # print("inputStr", inputStr, end='')
@@ -73,7 +73,7 @@ for inputStr in inputline:
         else :
             file_out.close()
             file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-            printStr = "ERROR 1: not match type : " + list_str[1]
+            printStr = "[REJECT] Error 1 : not match type : " + list_str[1]
             filewrite(file_out, printStr)
             filewrite(file_out, '\n')
             break
@@ -107,7 +107,7 @@ while (err == 0):
         print("REJECT")
         err = 1
         # ---Error message--- #
-        printStr = "ERROR 2: Token number ({}) ".format(token_index) + inputline[token_index-1]
+        printStr = "[REJECT] Error 2 : Token number ({}) ".format(token_index) + inputline[token_index-1]
         message = "SyntaxError: Missing a terminal corresponding to one of the following: (token line {})".format(token_index)
         # 올바른 syntax가 되기 위해 필요한 아이템
         missing_item = [item for item in list(SLR_TABLE[current_state].keys()) if item != END_MARK and item.islower()]

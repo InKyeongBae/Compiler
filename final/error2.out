@@ -4,7 +4,7 @@
 ['TYPE', 'String']
 ['IDENTIFIER', 'newStr']
 ['ASSIGN', '=']
-['LITERAL', '"New Test String"']
+['LITERAL', '"Error"']
 ['SEMICOLON', ';']
 ['IDENTIFIER', 'a']
 ['ASSIGN', '=']

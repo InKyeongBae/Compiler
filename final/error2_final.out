@@ -1,3 +1,3 @@
-ERROR 2: Token number (9) ['IDENTIFIER', 'a']
+[REJECT] Error 2 : Token number (9) ['IDENTIFIER', 'a']
 SyntaxError: Missing a terminal corresponding to one of the following: (token line 9)
              ['vtype', 'class']

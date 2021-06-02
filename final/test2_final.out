@@ -1,3 +1,0 @@
-ERROR 2: Token number (8) ['INTEGER', '1']
-SyntaxError: Lexeme 1 must be a terminal corresponding to one of the following:
-             ['boolstr', 'lparen']
