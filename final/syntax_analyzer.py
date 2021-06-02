@@ -17,13 +17,13 @@ def filewrite(file, string):
 terminal_list = []
 err = 0
 for inputStr in inputline:
+    # lexical_analyzer.py의 결과값이 ERROR라서 syntax_analyzing을 할 수 없을 때
     if inputStr[0] == "E" :
         filewrite(file_out, "[REJECT] Error 0 : input file(Lexical Analysis Result) error")
         err = 1
         break
-    # print("inputStr", inputStr, end='')
-    # print("terminal_list", terminal_list)
-    # print("")
+
+    # lexical_analyzer.py의 결과값을 syntax_analyzer.py에 쓰이는 TERMINAL 용어로 바꾸어 list에 추가
     if inputStr[0] == "[" :
         list_str = inputStr.split("'")
         if list_str[1] == "IDENTIFIER" :
@@ -70,6 +70,10 @@ for inputStr in inputline:
                 terminal_list.append("class")
             elif list_str[3] == "return":
                 terminal_list.append("return")
+                
+        # lexical_analyzer.py에서는 [ ]를 올바르 토큰으로 정의하였지만
+        # syntax_analyzer.py에서는 [ ]를 TERMINAL로 선언하지 않았으므로
+        # [ ]가 오면 syntax_analyzer.py의 결과가 ERROR가 된다.
         else :
             file_out.close()
             file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
@@ -79,7 +83,6 @@ for inputStr in inputline:
             break
 
 terminal_list.append(END_MARK)
-#print(terminal_list)
 output = ""
 for i in range(0, len(terminal_list)) :
     output = output + " " + terminal_list[i]
@@ -95,12 +98,12 @@ token_index = 0 # line for error
 while (err == 0):
     k += 1
 
-    # current state
+    # 현재 state
     current_state = now_stack[-1]
-    # next input symbol
+    # 다음 input symbol
     next_symbol = terminal_list[position]
 
-    # next symbol이 SLR_TABLE에 있는 지 체크
+    # 다음 symbol이 SLR_TABLE에 있는 지 체크
     if next_symbol not in SLR_TABLE[current_state].keys():
         file_out.close()
         file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
@@ -126,13 +129,13 @@ while (err == 0):
         break
 
 
-    # shift
+    # shift ( 값이 's+숫자'일 때 )
     if (SLR_TABLE[current_state][next_symbol][0] == 's'):
         position = position + 1
         now_stack.append(int(SLR_TABLE[current_state][next_symbol][1:]))
         token_index += 1 # count the token index
 
-    # reduce
+    # reduce ( 값이 'r+숫자'일 때 )
     elif (SLR_TABLE[current_state][next_symbol][0] == 'r'):
 
         string_check = SLR_TABLE[current_state][next_symbol][1:]
@@ -141,15 +144,17 @@ while (err == 0):
 
         # terminal list 확인
         for i in range(rule_check_len):
-            if (rule_check[2] != 'epsilon'):  # if not epsilon
-                # pop out from stack
+            # epsilon이 아닐 때
+            if (rule_check[2] != 'epsilon'):
+                # stack에서 pop
                 now_stack.pop()
                 terminal = terminal_list.pop(position - i - 1)
 
-        if (rule_check[2] != 'epsilon'):  # if not epsilon
+        # epsilon이 아닐 때
+        if (rule_check[2] != 'epsilon'):
             position = position - rule_check_len + 1
+        # epsilon일 때
         else:
-            # epsilon일 때
             position = position + 1
         
         # terminal list 확인
@@ -158,6 +163,7 @@ while (err == 0):
 
         now_stack.append(SLR_TABLE[current_state][rule_check[0]])
 
+    # 결과가 ACCEPT일 때
     elif (SLR_TABLE[current_state][next_symbol] == 'acc'):
         file_out.close()
         file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
