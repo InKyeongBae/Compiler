@@ -76,7 +76,7 @@ for inputStr in inputline:
             break
 
 terminal_list.append(END_MARK)
-print(terminal_list)
+#print(terminal_list)
 
 now_stack = [0]
 position = 0
@@ -85,13 +85,13 @@ k = 0
 
 while (err == 0):
     k += 1
-    print("!!!", k)
+    #print("!!!", k)
 
     # current state
     current_state = now_stack[-1]
     # next input symbol
     next_symbol = terminal_list[position]
-    print(next_symbol, "|", current_state)
+    #print(next_symbol, "|", current_state)
     # next symbol이 SLR_TABLE에 있는 지 체크
     if next_symbol not in SLR_TABLE[current_state].keys():
         file_out.close()
@@ -136,7 +136,7 @@ while (err == 0):
                 # pop out from stack
                 now_stack.pop()
                 terminal_list.pop(position - i - 1)
-        print("terminal", terminal_list)
+        #print("terminal", terminal_list)
         if (rule_check[2] != 'epsilon'):  # if not epsilon
             position = position - rule_check_len + 1
         else:
@@ -147,12 +147,15 @@ while (err == 0):
         current_state = now_stack[-1]
         # print(terminal_list)
 
+        # ------------------------------------------------------------#
         if rule_check[0] not in SLR_TABLE[current_state].keys():
             file_out.close()
             file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-            print(rule_check[0])
+            print(rule_check)
+            print(current_state)
             print(SLR_TABLE[current_state].keys())
             print("REJECT 2")
+            print(inputline[position-1])
             # ---Error message--- #
             err = 1
             printStr = "ERROR 3: "
@@ -160,14 +163,14 @@ while (err == 0):
             filewrite(file_out, '\n')
             # ---End of the Error message--- #
             break
-
+        # ------------------------------------------------------------#
         now_stack.append(SLR_TABLE[current_state][rule_check[0]])
 
     elif (SLR_TABLE[current_state][next_symbol] == 'acc'):
         file_out.close()
         file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
         printStr = "ACCEPT"
-        print("ACCEPT 1")
+        print("ACCEPT")
         err = 1
         filewrite(file_out, printStr)
         filewrite(file_out, '\n')
