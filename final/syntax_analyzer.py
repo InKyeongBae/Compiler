@@ -79,7 +79,12 @@ for inputStr in inputline:
             break
 
 terminal_list.append(END_MARK)
-# print(terminal_list)
+#print(terminal_list)
+output = ""
+for i in range(0, len(terminal_list)) :
+    output = output + " " + terminal_list[i]
+
+print(output)
 
 now_stack = [0]
 position = 0
