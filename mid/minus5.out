@@ -1,0 +1,5 @@
+['IDENTIFIER', 'number1']
+['OPERATOR', '-']
+['IDENTIFIER', 'number2']
+['ASSIGN', '=']
+['IDENTIFIER', 'number3']

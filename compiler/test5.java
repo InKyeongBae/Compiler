@@ -1,2 +1,0 @@
-"Literal String"
-

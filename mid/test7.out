@@ -1,0 +1,7 @@
+['IDENTIFIER', 'a']
+['OPERATOR', '*']
+['OPERATOR', '/']
+['OPERATOR', '+']
+['OPERATOR', '-']
+['OPERATOR', '/']
+['IDENTIFIER', 'b']
