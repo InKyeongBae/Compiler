@@ -61,7 +61,7 @@ SLR_TABLE = [
     },
     {
         'vtype': 's5', 'rbrace': 'r40',
-        'VDECL': 31, 'FDECL': 32
+        'VDECL': 31, 'FDECL': 32, 'ODECL': 30
     },
     {
         'rparen': 's33'
