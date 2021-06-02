@@ -90,7 +90,7 @@ now_stack = [0]
 position = 0
 
 k = 0
-token_index = 1 # line for error
+token_index = 0 # line for error
 
 while (err == 0):
     k += 1
