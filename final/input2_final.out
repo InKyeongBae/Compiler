@@ -1,3 +1,0 @@
-ERROR 2: Token number (0) ['INTEGER', '10']
-SyntaxError: Lexeme 10 must be followed by a terminal corresponding to one of the following:
-             ['vtype', 'class', 'CODE', 'VDECL', 'FDECL', 'CDECL']
