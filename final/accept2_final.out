@@ -1,0 +1,3 @@
+ERROR 3: GOTO table in SLR table is wrong, please check the CFG G or table
+State 17 has SLR table : {'vtype': 's5', 'rbrace': 'r40', 'VDECL': 31, 'FDECL': 32}
+State 17 attempted to reduce by CFG G: ['ODECL', '->', 'VDECL', 'ODECL']
