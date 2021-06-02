@@ -105,11 +105,11 @@ SLR_TABLE = [
     },
     {
         'vtype': 's5', 'rbrace': 'r40',
-        'CODE': 31, 'FDECL': 32, 'ODECL': 39
+        'VDECL': 31, 'FDECL': 32, 'ODECL': 39
     },
     {
         'vtype': 's5', 'rbrace': 'r40',
-        'CODE': 31, 'FDECL': 32, 'ODECL': 40
+        'VDECL': 31, 'FDECL': 32, 'ODECL': 40
     },
     {
         'lbrace': 's41',

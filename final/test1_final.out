@@ -1,1 +1,3 @@
-ACCEPT
+ERROR 2: Token number (8) ['INTEGER', '1']
+SyntaxError: Lexeme 1 must be followed by a terminal corresponding to one of the following:
+             ['boolstr', 'lparen', 'COND', 'T']
