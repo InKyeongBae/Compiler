@@ -18,7 +18,7 @@ terminal_list = []
 err = 0
 for inputStr in inputline:
     if inputStr[0] == "E" :
-        filewrite(file_out, "ERROR : input file(Lexical Analysis Result) error")
+        filewrite(file_out, "ERROR 0: input file(Lexical Analysis Result) error")
         err = 1
         break
     if inputStr[0] == "[" :
@@ -70,7 +70,7 @@ for inputStr in inputline:
         else :
             file_out.close()
             file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-            printStr = "ERROR : not match type : " + list_str[1]
+            printStr = "ERROR 1: not match type : " + list_str[1]
             filewrite(file_out, printStr)
             filewrite(file_out, '\n')
             break
@@ -89,7 +89,6 @@ while (err == 0):
 
     # current state
     current_state = now_stack[-1]
-
     # next input symbol
     next_symbol = terminal_list[position]
     print(next_symbol, "|", current_state)
@@ -97,16 +96,27 @@ while (err == 0):
     if next_symbol not in SLR_TABLE[current_state].keys():
         file_out.close()
         file_out = open(f"{filename.replace('.out', '')}_final.out", 'w')
-        print(next_symbol)
-        print(position)
-        print(SLR_TABLE[current_state])
-        print("REJECT 1")
+        print("REJECT")
         err = 1
-        printStr = "REJECT"
-        ## Error line 처리
-        filewrite(file_out, printStr)
+        # ---Error message--- #
+        printStr = "ERROR 2: Token number ({}) ".format(position) + inputline[position-1]
+        message = "SyntaxError: Lexeme " + inputline[position-1].split("'")[3] + \
+                  " must be followed by a terminal corresponding to one of the following:"
+        missing_item = [item for item in list(SLR_TABLE[current_state].keys()) if item != END_MARK]
+        missing = "             {}".format(missing_item)
+
+        print(printStr, end='')
+        print(message)
+        print(missing)
+
+        filewrite(file_out, printStr) # file out
+        filewrite(file_out, message)
         filewrite(file_out, '\n')
+        filewrite(file_out, missing)
+        filewrite(file_out, '\n')
+        # ---End of the Error message--- #
         break
+
 
 
     # shift
@@ -120,7 +130,6 @@ while (err == 0):
 
         rule_check = RULES[string_check].split()
         rule_check_len = len(rule_check) - 2
-
         # terminal list 확인
         for i in range(rule_check_len):
             if (rule_check[2] != 'epsilon'):  # if not epsilon
@@ -144,11 +153,12 @@ while (err == 0):
             print(rule_check[0])
             print(SLR_TABLE[current_state].keys())
             print("REJECT 2")
-            ## Error line 처리
+            # ---Error message--- #
             err = 1
-            printStr = "REJECT"
+            printStr = "ERROR 3: "
             filewrite(file_out, printStr)
             filewrite(file_out, '\n')
+            # ---End of the Error message--- #
             break
 
         now_stack.append(SLR_TABLE[current_state][rule_check[0]])
