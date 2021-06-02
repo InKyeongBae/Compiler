@@ -99,7 +99,7 @@ while (err == 0):
     current_state = now_stack[-1]
     # next input symbol
     next_symbol = terminal_list[position]
-    # print(next_symbol, "|", current_state)
+    print(next_symbol, "|", current_state)
     # next symbol이 SLR_TABLE에 있는 지 체크
     if next_symbol not in SLR_TABLE[current_state].keys():
         file_out.close()
