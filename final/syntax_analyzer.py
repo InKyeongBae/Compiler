@@ -93,7 +93,7 @@ k = 0
 
 while (err == 0):
     k += 1
-    # print("!!!", k)
+    print("!!!", k)
 
     # current state
     current_state = now_stack[-1]
@@ -125,23 +125,23 @@ while (err == 0):
         filewrite(file_out, '\n')
         # ---End of the Error message--- #
         break
+    print(next_symbol, "|", current_state)
+    print(terminal_list)
+    print(position)
 
     # shift
     if (SLR_TABLE[current_state][next_symbol][0] == 's'):
         position = position + 1
         now_stack.append(int(SLR_TABLE[current_state][next_symbol][1:]))
-
+        ("shift")
     # reduce
     elif (SLR_TABLE[current_state][next_symbol][0] == 'r'):
+        print("reduce")
         string_check = SLR_TABLE[current_state][next_symbol][1:]
 
         rule_check = RULES[string_check].split()
         rule_check_len = len(rule_check) - 2
-<<<<<<< HEAD
-
-=======
-        print(rule_check)
->>>>>>> f8811c6def83cbf6cfd31a54749e22e26b8d61d2
+        print("                 rule", rule_check)
         # terminal list 확인
         for i in range(rule_check_len):
             if (rule_check[2] != 'epsilon'):  # if not epsilon
@@ -155,6 +155,7 @@ while (err == 0):
             # epsilon일 때
             position = position + 1
         # terminal list 확인
+
         terminal_list.insert(position - 1, rule_check[0])
         current_state = now_stack[-1]
 
