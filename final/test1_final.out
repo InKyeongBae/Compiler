@@ -1,3 +1,1 @@
-ERROR 3: GOTO table in SLR table is wrong, please check the CFG G or table
-State 81 has SLR table : {'rbrace': 's83'}
-State 81 attempted to reduce by CFG G: ['ELSE', '->', 'epssilon']
+ACCEPT

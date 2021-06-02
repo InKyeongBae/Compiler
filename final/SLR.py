@@ -87,8 +87,8 @@ SLR_TABLE = [
     {
         'semi': 'r13', 'addsub': 's35', 'rparen': 'r13'
     },
-    {
-        'semi': 'r15', 'addsub': 'r15', 'multdiv': 's36', 'rparen': 'r15'
+    {                            # r
+        'semi': 'r15', 'addsub': 's15', 'multdiv': 's36', 'rparen': 'r15'
     },
     {
         'id': 's28', 'lparen': 's27', 'num': 's29',
